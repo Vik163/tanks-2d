@@ -1,0 +1,13 @@
+{
+  "presets": [
+    "@babel/preset-env", // для компиляции ES2015+ в ES5.
+    "@babel/preset-typescript",
+    [
+      "@babel/preset-react",
+      {
+        // подставляется react без импортов
+        "runtime": "automatic"
+      }
+    ]
+  ]
+}
