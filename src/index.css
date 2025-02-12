@@ -65,29 +65,29 @@
 
 .cnv__container {
    display: flex;
-   width: 1350px;
-   height: 912px;
+   width: 1100px;
+   height: 812px;
    border: 5px solid #ba822c;
    background: url(./assets/images/maps/tiles_block.png);
    border-radius: 5px;
 }
 
 #canvas {
-   border: 1px solid #ba822c;
 }
 
 .cnv__info {
    height: 100%;
-   width: 136px;
+   width: 135px;
+   padding-left: 2px;
    background: url(./assets/images/maps/info_block.png) no-repeat center;
    background-size: 97% 97%;
 }
 
 .editor__nav {
    position: absolute;
-   padding: 30px 12px;
+   padding: 30px 10px;
    top: 47px;
-   right: -90px;
+   right: -84px;
    display: none;
    border: 2px solid #ba822c;
    background: url(./assets/images/maps/tiles_block.png);
@@ -95,7 +95,7 @@
    border-radius: 10px;
    flex-direction: column;
    align-items: center;
-   gap: 30px;
+   gap: 20px;
 }
 
 .editor__nav_active {
