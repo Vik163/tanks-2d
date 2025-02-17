@@ -6,7 +6,7 @@ const path = require('path');
 
 export default (env: BuildEnv) => {
    const paths: BuildPaths = {
-      entry: path.resolve(__dirname, './src/index.ts'),
+      entry: path.resolve(__dirname, './src/init.ts'),
       build: path.resolve(__dirname, './build'),
       html: path.resolve(__dirname, './src/index.html'),
       src: path.resolve(__dirname, './src'),
