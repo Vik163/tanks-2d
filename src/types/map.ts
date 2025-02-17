@@ -1,8 +1,15 @@
+export type TypesBlocks =
+   | 'bricks'
+   | 'concrete'
+   | 'placeStart'
+   | 'headquarters'
+   | undefined;
+
 export interface Block {
    link: string | undefined;
    name: string | undefined;
    countHit: number;
-   type: string | undefined;
+   type: TypesBlocks;
    coord: number[];
 }
 

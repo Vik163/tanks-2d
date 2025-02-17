@@ -30,7 +30,7 @@ export const mapsBlocks: InfoBlock[] = [
    {
       link: placeStart,
       name: 'placeStart',
-      type: 'start',
+      type: 'placeStart',
    },
    {
       link: headquarters,

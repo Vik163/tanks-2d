@@ -17,6 +17,9 @@ export class Main {
    blockHeight: number;
    mapGame: MapGame;
    maps: Maps;
+   keyGame: boolean;
+   btn: HTMLElement;
+   intervalId: string | number | NodeJS.Timeout | undefined;
 
    constructor(
       cnv: HTMLCanvasElement,
@@ -32,6 +35,46 @@ export class Main {
       this.blockWidth = BLOCK_WIDTH;
       this.blockHeight = BLOCK_HEIGHT;
       this.mapGame = JSON.parse(localStorage.getItem('map_1')!);
+      this.keyGame = false;
+      this.btn = document.getElementById('btn_start')!;
+      this.intervalId = undefined;
+   }
+
+   actionsBtn(act: string) {
+      if (act === 'START') {
+         if (this.btn.textContent === 'START') {
+            this.keyGame = true;
+
+            this.btn.textContent = 'PAUSE';
+         } else {
+            if (this.btn.textContent === 'PAUSE') {
+               this.btn.textContent = 'PAUSE*';
+            } else {
+               this.btn.textContent = 'PAUSE';
+            }
+            if (!this.intervalId) {
+               this.intervalId = setInterval(() => {
+                  this.btn.classList.toggle('btn_start_active');
+
+                  if (this.btn.textContent === 'PAUSE') {
+                     clearInterval(this.intervalId);
+                     this.intervalId = undefined;
+
+                     this.btn.classList.remove('btn_start_active');
+                  }
+               }, 1000);
+            }
+         }
+      } else {
+         clearInterval(this.intervalId);
+         this.intervalId = undefined;
+         this.btn.classList.remove('btn_start_active');
+
+         this.keyGame = false;
+         this.btn.textContent = 'START';
+      }
+
+      return this.keyGame;
    }
 
    update(dt: number) {

@@ -6,8 +6,7 @@ import {
 } from '@/constants/init';
 import { mapsBlocks } from './model/constants/blocks';
 import type { InfoBlock } from './model/types/maps';
-import { COLOR_LINE } from './model/constants/maps';
-import type { CnvProps } from '@/types/app';
+import type { CnvProps } from '@/types/main';
 import type { MapGame } from '@/types/map';
 
 export class Maps {
@@ -30,7 +29,7 @@ export class Maps {
       this.cnv = cnv;
       this.ctx = ctx;
       this._$ = (id: string) => document.getElementById(id);
-      this.colorLine = COLOR_LINE;
+      this.colorLine = 'rgb(1, 159, 1)';
       this.cnvWidth = CANVAS_WIDTH;
       this.blockWidth = BLOCK_WIDTH;
       this.cnvHeight = CANVAS_HEIGHT;

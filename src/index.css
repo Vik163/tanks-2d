@@ -59,6 +59,10 @@
    background-color: #966925;
 }
 
+.btn_start_active {
+   background-color: #963f25;
+}
+
 .btn:last-child {
    margin-left: 50px;
 }
