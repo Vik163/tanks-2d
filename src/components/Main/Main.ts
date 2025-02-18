@@ -6,6 +6,7 @@ import {
    CANVAS_WIDTH,
 } from '@/constants/init';
 import { Maps } from '../Maps/Maps';
+import { MyTank } from '../MyTank/MyTank';
 
 export class Main {
    cnv: HTMLCanvasElement;
@@ -20,16 +21,14 @@ export class Main {
    keyGame: boolean;
    btn: HTMLElement;
    intervalId: string | number | NodeJS.Timeout | undefined;
+   _$: (id: string) => HTMLElement | null;
+   myTank: MyTank;
 
-   constructor(
-      cnv: HTMLCanvasElement,
-      ctx: CanvasRenderingContext2D,
-      maps: Maps,
-   ) {
-      this.cnv = cnv;
-      this.ctx = ctx;
+   constructor() {
+      this._$ = (id: string) => document.getElementById(id)!;
+      this.cnv = this._$('canvas') as HTMLCanvasElement;
+      this.ctx = this.cnv.getContext('2d') as CanvasRenderingContext2D;
       this.dt = 0;
-      this.maps = maps;
       this.cnvWidth = CANVAS_WIDTH;
       this.cnvHeight = CANVAS_HEIGHT;
       this.blockWidth = BLOCK_WIDTH;
@@ -38,6 +37,19 @@ export class Main {
       this.keyGame = false;
       this.btn = document.getElementById('btn_start')!;
       this.intervalId = undefined;
+      this.maps = new Maps({ cnv: this.cnv, ctx: this.ctx });
+      this.myTank = new MyTank(this.ctx);
+   }
+
+   addListeners() {
+      // this.$('btn_start')?.addEventListener('click', () => {
+      //    this.actionsBtn('START');
+      // });
+
+      this._$('btn_editor')?.addEventListener('click', () => {
+         if (!this.keyGame) this.maps.openEditor();
+      });
+      // this.myTank.addListeners();
    }
 
    actionsBtn(act: string) {
@@ -79,6 +91,8 @@ export class Main {
 
    update(dt: number) {
       this.dt = dt;
+
+      this.myTank.update(dt);
    }
 
    render() {
@@ -86,6 +100,7 @@ export class Main {
       this.cnv.height = this.cnvHeight;
 
       this.maps.renderMap();
+      this.myTank.renderMyTank();
    }
 }
 // const playerSpeed = 200;

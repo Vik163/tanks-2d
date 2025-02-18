@@ -1,21 +1,19 @@
 import { initLoadImg } from './lib/ImagesLoad';
 import { Main } from './components/Main/Main';
-import { Maps } from './components/Maps/Maps';
 import './index.css';
-import { arrSrcImg, map_1 } from './constants/maps';
-import { MyTank } from './components/MyTank/MyTank';
+import { map_1 } from './constants/maps';
+import { mapsBlocks } from './components/Maps/model/constants/blocks';
+import { InfoBlock } from './components/Maps/model/types/maps';
+import { arrSrcImg } from './constants/images';
 
 function init() {
    const $ = (id: string) => document.getElementById(id);
+
    localStorage.setItem('map_1', JSON.stringify(map_1));
+
    let keyGame = false;
 
-   const cnv = $('canvas') as HTMLCanvasElement;
-   const ctx = cnv.getContext('2d') as CanvasRenderingContext2D;
-
-   const maps = new Maps({ cnv, ctx });
-   const myTank = new MyTank();
-   const main = new Main(cnv, ctx, maps);
+   const main = new Main();
 
    let lastTime: number;
 
@@ -26,6 +24,7 @@ function init() {
       lastTime = Date.now();
       const now = Date.now();
       const dt = (now - lastTime) / 1000.0;
+
       // if (keyGame) {
       main.update(dt);
       main.render();
@@ -41,11 +40,18 @@ function init() {
 
    $('btn_start')?.addEventListener('click', () => {
       keyGame = main.actionsBtn('START');
+      // Закрыть блок редактора карты при запуске игры
+      $('map__grid-btn')?.remove();
+      $('editor_nav')?.classList.remove('editor__nav_active');
+      mapsBlocks.forEach((i: InfoBlock) => {
+         $(i.name)?.remove();
+      });
    });
    $('btn_stop')?.addEventListener('click', () => {
       keyGame = main.actionsBtn('STOP');
    });
-   $('btn_editor')?.addEventListener('click', () => maps.openEditor());
+
+   main.addListeners();
 }
 
 init();

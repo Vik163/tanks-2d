@@ -1,19 +1,10 @@
-import block_concrete_1 from '@/assets/images/maps/block_concrete_1.jpg';
+// import block_concrete_1 from '@/assets/images/maps/block_concrete_1.jpg';
 import block_concrete_2 from '@/assets/images/maps/block_concrete_2.jpg';
-import block_bricks_2 from '@/assets/images/maps/block_bricks_1.jpg';
+// import block_bricks_2 from '@/assets/images/maps/block_bricks_1.jpg';
 import block_bricks_1 from '@/assets/images/maps/block_bricks_2.png';
 import headquarters from '@/assets/images/maps/headquarters.png';
 import placeStart from '@/assets/images/maps/place_start.png';
 import type { MapGame } from '@/types/map';
-
-export const arrSrcImg = [
-   block_bricks_1,
-   block_concrete_1,
-   block_concrete_2,
-   block_bricks_2,
-   headquarters,
-   placeStart,
-];
 
 export const map_1: MapGame = {
    '0': [
@@ -895,13 +886,6 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [300, 750],
-      },
-      {
-         coord: [350, 750],
-         countHit: 0,
-         link: placeStart,
-         name: 'placeStart',
-         type: 'placeStart',
       },
       {
          name: 'block_bricks_1',
