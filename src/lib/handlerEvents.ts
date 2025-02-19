@@ -38,5 +38,6 @@ export const handlerEvents = () => {
 
    return {
       isDown: (key: string) => pressedKeys[key.toUpperCase()],
+      isUp: (key: string) => pressedKeys[key.toUpperCase()],
    };
 };

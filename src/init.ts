@@ -24,7 +24,6 @@ function init() {
       lastTime = Date.now();
       const now = Date.now();
       const dt = (now - lastTime) / 1000.0;
-
       // if (keyGame) {
       main.update(dt);
       main.render();

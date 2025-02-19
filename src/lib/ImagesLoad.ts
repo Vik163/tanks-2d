@@ -20,8 +20,6 @@ export function initLoadImg() {
       } else {
          const img = new Image();
          img.onload = function () {
-            // resourceCache[url] = img;
-
             if (isReady()) {
                readyCallbacks.forEach(function (func) {
                   func();
@@ -30,7 +28,6 @@ export function initLoadImg() {
          };
 
          resourceCache[url] = img;
-         // resourceCache[url] = false;
          img.src = url;
       }
    }

@@ -8,5 +8,5 @@ export const myTank: IMyTank = {
    stars: 0,
    level: 1,
    hits: 0,
-   coord: [550, 750],
+   coord: [550, 751],
 };
