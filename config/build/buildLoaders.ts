@@ -8,7 +8,7 @@ export function buildLoaders (options: BuildOptions) {
 
   // Можно добавить обработку шрифтов
   const fileLoader = {
-    test: /\.(png|svg|jpg|jpeg|gif)$/i,
+    test: /\.(png|svg|jpg|jpeg|gif|ogg|mp3)$/i,
     type: 'asset/resource'
   }
 

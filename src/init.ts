@@ -5,6 +5,7 @@ import { map_1 } from './constants/maps';
 import { mapsBlocks } from './components/Maps/model/constants/blocks';
 import { InfoBlock } from './components/Maps/model/types/maps';
 import { arrSrcImg } from './constants/images';
+import { arrSounds, soundsLinks } from './constants/sounds';
 
 function init() {
    const $ = (id: string) => document.getElementById(id);
@@ -18,7 +19,8 @@ function init() {
    let lastTime: number;
 
    initLoadImg();
-   window.resources.load(arrSrcImg);
+   window.resources.loadSound(arrSounds);
+   window.resources.loadImg(arrSrcImg);
 
    function loopGame() {
       lastTime = Date.now();
@@ -37,7 +39,10 @@ function init() {
       loopGame();
    });
 
+   const tune_1 = window.resources.getSound(soundsLinks.tune_1);
+
    $('btn_start')?.addEventListener('click', () => {
+      tune_1.play();
       keyGame = main.actionsBtn('START');
       // Закрыть блок редактора карты при запуске игры
       $('map__grid-btn')?.remove();

@@ -7,6 +7,8 @@ import {
 } from '@/constants/init';
 import { Maps } from '../Maps/Maps';
 import { MyTank } from '../MyTank/MyTank';
+import { soundsLinks } from '@/constants/sounds';
+import { Sounds } from '@/types/sounds';
 
 export class Main {
    cnv: HTMLCanvasElement;
@@ -23,6 +25,7 @@ export class Main {
    intervalId: string | number | NodeJS.Timeout | undefined;
    _$: (id: string) => HTMLElement | null;
    myTank: MyTank;
+   sounds: Sounds;
 
    constructor() {
       this._$ = (id: string) => document.getElementById(id)!;
@@ -39,6 +42,7 @@ export class Main {
       this.intervalId = undefined;
       this.maps = new Maps({ cnv: this.cnv, ctx: this.ctx });
       this.myTank = new MyTank(this.ctx);
+      this.sounds = soundsLinks;
    }
 
    addListeners() {
@@ -49,8 +53,6 @@ export class Main {
       this._$('btn_editor')?.addEventListener('click', () => {
          if (!this.keyGame) this.maps.openEditor();
       });
-
-      // this.myTank.addListeners();
    }
 
    actionsBtn(act: string) {

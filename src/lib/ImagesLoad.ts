@@ -1,22 +1,50 @@
 export function initLoadImg() {
-   const resourceCache: Record<string, HTMLImageElement> = {};
+   const resourceCacheImg: Record<string, HTMLImageElement> = {};
+   const resourceCacheSound: Record<string, HTMLAudioElement> = {};
    const loading = [];
    const readyCallbacks: Array<() => void> = [];
 
    // Load an image url or an array of image urls
-   function load(urlOrArr: string | string[]) {
+   function loadImg(urlOrArr: string | string[]) {
       if (urlOrArr instanceof Array) {
          urlOrArr.forEach(function (url) {
-            _load(url);
+            _loadImg(url);
          });
       } else {
-         _load(urlOrArr);
+         _loadImg(urlOrArr);
       }
    }
 
-   function _load(url: string) {
-      if (resourceCache[url]) {
-         return resourceCache[url];
+   function loadSound(urlOrArr: string | string[]) {
+      if (urlOrArr instanceof Array) {
+         urlOrArr.forEach(function (url) {
+            _loadSound(url);
+         });
+      } else {
+         _loadSound(urlOrArr);
+      }
+   }
+
+   function _loadSound(url: string) {
+      if (resourceCacheSound[url]) {
+         return resourceCacheSound[url];
+      } else {
+         const sound = new Audio(url);
+         sound.onload = function () {
+            if (isReady()) {
+               readyCallbacks.forEach(function (func) {
+                  func();
+               });
+            }
+         };
+
+         resourceCacheSound[url] = sound;
+      }
+   }
+
+   function _loadImg(url: string) {
+      if (resourceCacheImg[url]) {
+         return resourceCacheImg[url];
       } else {
          const img = new Image();
          img.onload = function () {
@@ -27,21 +55,25 @@ export function initLoadImg() {
             }
          };
 
-         resourceCache[url] = img;
+         resourceCacheImg[url] = img;
          img.src = url;
       }
    }
 
-   function get(url: string) {
-      return resourceCache[url];
+   function getImg(url: string) {
+      return resourceCacheImg[url];
+   }
+
+   function getSound(url: string) {
+      return resourceCacheSound[url];
    }
 
    function isReady() {
       let ready = true;
-      for (const k in resourceCache) {
+      for (const k in resourceCacheImg) {
          if (
-            Object.prototype.hasOwnProperty.call(resourceCache, k) &&
-            !resourceCache[k]
+            Object.prototype.hasOwnProperty.call(resourceCacheImg, k) &&
+            !resourceCacheImg[k]
          ) {
             ready = false;
          }
@@ -54,8 +86,10 @@ export function initLoadImg() {
    }
 
    window.resources = {
-      load,
-      get,
+      loadImg,
+      loadSound,
+      getImg,
+      getSound,
       onReady,
       isReady,
    };

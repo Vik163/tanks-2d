@@ -1,4 +1,4 @@
-import { handlerEvents } from '@/lib/handlerEvents';
+import { handlerEventsAndAngle } from '@/lib/handlerEvents';
 import { myTank } from './constants/myTank';
 import type { IMyTank } from './types/myTank';
 import {
@@ -9,9 +9,10 @@ import {
 } from '@/constants/init';
 import type { MapGame } from '@/types/map';
 import { map_1 } from '@/constants/maps';
+import { soundsLinks } from '@/constants/sounds';
 
 interface Input {
-   isDown: (key: string) => boolean;
+   isDown: (key: string) => { angle: number; status: boolean };
    isUp: (key: string) => boolean;
 }
 
@@ -34,6 +35,7 @@ export class MyTank {
    input: Input;
    _keyRotate: boolean;
    _delayRotate: number;
+   _soundTankEngine: HTMLAudioElement;
 
    constructor(ctx: CanvasRenderingContext2D) {
       this.ctx = ctx;
@@ -43,7 +45,7 @@ export class MyTank {
       this.blockHeight = BLOCK_HEIGHT;
       this.myTank = myTank;
       this.dir = 'UP';
-      this.input = handlerEvents();
+      this.input = handlerEventsAndAngle();
       this.gameTime = 0;
       this.tankX = myTank.coord[0]; // смещаю из угла в центр
       this.tankY = myTank.coord[1];
@@ -52,6 +54,7 @@ export class MyTank {
       this._coordCell = { cellX: 0, cellY: 0 };
       this._keyRotate = false;
       this._delayRotate = 150;
+      this._soundTankEngine = new Audio(soundsLinks.engine);
    }
 
    update(dt: number) {
@@ -63,6 +66,19 @@ export class MyTank {
       myTank.coord[1] = this.tankY;
    }
 
+   _setDounds() {
+      if (
+         this.input.isDown('UP').status ||
+         this.input.isDown('DOWN').status ||
+         this.input.isDown('LEFT').status ||
+         this.input.isDown('RIGHT').status
+      ) {
+         this._soundTankEngine.play();
+      } else {
+         this._soundTankEngine.pause();
+      }
+   }
+
    _setTimerRotate() {
       this._keyRotate = true;
       const isTimerRotate = setTimeout(() => {
@@ -71,13 +87,25 @@ export class MyTank {
       }, this._delayRotate);
    }
 
+   // проверка препятствий и плавная остановка
+   _checkMoveTank(key: Dir) {
+      this._angle = this.input.isDown(key).angle;
+      if (
+         (this._checkObstacles(key) && this.input.isDown(key).status) ||
+         this._smoothStop(key)
+      )
+         return true;
+
+      return false;
+   }
+
    _moveAndRotateTank() {
-      // проверка препятствий и плавная остановка
-      if (this._checkObstacles('UP') || this._smoothStop('UP')) {
+      this._setDounds();
+      // проверка движения
+      if (this._checkMoveTank('UP')) {
          // если не совпадают клавиша поворота с направлением
          // устанаить угол поворота, направление, запустить таймер поворота
          if (this.dir !== 'UP') {
-            this._getAngleRotate('UP');
             this.dir = 'UP';
             this._setTimerRotate();
          } // пока работает таймер не двигается
@@ -86,39 +114,32 @@ export class MyTank {
          }
       }
 
-      if (this._checkObstacles('DOWN') || this._smoothStop('DOWN')) {
+      if (this._checkMoveTank('DOWN')) {
          if (this.dir !== 'DOWN') {
-            this._getAngleRotate('DOWN');
             this.dir = 'DOWN';
             this._setTimerRotate();
          }
-         if (!this._keyRotate) this.tankY += 0.5;
+         if (!this._keyRotate) {
+            this._setDounds();
+            this.tankY += 0.5;
+         }
       }
 
-      if (this._checkObstacles('RIGHT') || this._smoothStop('RIGHT')) {
+      if (this._checkMoveTank('RIGHT')) {
          if (this.dir !== 'RIGHT') {
-            this._getAngleRotate('RIGHT');
             this.dir = 'RIGHT';
             this._setTimerRotate();
          }
          if (!this._keyRotate) this.tankX += 0.5;
       }
 
-      if (this._checkObstacles('LEFT') || this._smoothStop('LEFT')) {
+      if (this._checkMoveTank('LEFT')) {
          if (this.dir !== 'LEFT') {
-            this._getAngleRotate('LEFT');
             this.dir = 'LEFT';
             this._setTimerRotate();
          }
          if (!this._keyRotate) this.tankX -= 0.5;
       }
-   }
-
-   _getAngleRotate(key: string) {
-      if (key === 'UP') this._angle = 0;
-      if (key === 'DOWN') this._angle = 180;
-      if (key === 'RIGHT') this._angle = 90;
-      if (key === 'LEFT') this._angle = -90;
    }
 
    _getCoordCell() {
@@ -135,57 +156,104 @@ export class MyTank {
             this.dir === 'UP'
          )
             return true;
-      } else if (key === 'DOWN') {
+      }
+
+      if (key === 'DOWN') {
          if (
             Math.floor(this.tankY) > this._coordCell.cellY + 3 &&
             Math.floor(this.tankY) < this._coordCell.cellY + this.blockHeight &&
             this.dir === 'DOWN'
          )
             return true;
-      } else if (key === 'RIGHT') {
+      }
+
+      if (key === 'RIGHT') {
          if (
             Math.floor(this.tankX) > this._coordCell.cellX &&
             Math.floor(this.tankX) < this._coordCell.cellX + this.blockWidth &&
             this.dir === 'RIGHT'
          )
             return true;
-      } else if (key === 'LEFT') {
+      }
+
+      if (key === 'LEFT') {
          if (
             Math.floor(this.tankX) > this._coordCell.cellX &&
             this.dir === 'LEFT'
          )
             return true;
-      } else {
-         return false;
       }
+      return false;
+   }
+
+   _checkObstaclesMap(key: string) {
+      if (key === 'UP') {
+         if (
+            this.tankY > 0 &&
+            this.map[this._coordCell.cellY - this.blockHeight] &&
+            !this.map[this._coordCell.cellY - this.blockHeight].some(
+               (bl) =>
+                  bl.coord[0] === this._coordCell.cellX &&
+                  bl.type !== 'placeStart',
+            )
+         ) {
+            return true;
+         }
+      }
+      if (key === 'DOWN') {
+         if (
+            this.tankY < this.cnvHeight - this.blockHeight &&
+            this.map[this._coordCell.cellY + this.blockHeight] &&
+            !this.map[this._coordCell.cellY + this.blockHeight].some(
+               (bl) =>
+                  bl.coord[0] === this._coordCell.cellX &&
+                  bl.type !== 'placeStart',
+            )
+         )
+            return true;
+      }
+      if (
+         key === 'RIGHT' &&
+         !this.map[this._coordCell.cellY].some(
+            (bl) =>
+               bl.coord[0] === this._coordCell.cellX + this.blockWidth &&
+               bl.type !== 'placeStart',
+         )
+      ) {
+         if (this.tankX < this.cnvWidth - this.blockWidth) return true;
+      }
+      if (key === 'LEFT') {
+         if (
+            this.tankX > 0 &&
+            !this.map[this._coordCell.cellY].some(
+               (bl) =>
+                  bl.coord[0] === this._coordCell.cellX - this.blockWidth &&
+                  bl.type !== 'placeStart',
+            )
+         )
+            return true;
+      }
+      return false;
    }
 
    _checkObstacles(key: string) {
       if (key === 'UP') {
-         if (this.tankY > 0 && this.input.isDown(key)) return true;
+         if (this._checkObstaclesMap('UP')) return true;
       }
       if (key === 'DOWN') {
-         if (
-            this.tankY < this.cnvHeight - this.blockHeight - 1 &&
-            this.input.isDown(key)
-         )
-            return true;
+         if (this._checkObstaclesMap('DOWN')) return true;
       }
       if (key === 'RIGHT') {
-         if (
-            this.tankX < this.cnvWidth - this.blockWidth - 1 &&
-            this.input.isDown(key)
-         )
-            return true;
+         if (this._checkObstaclesMap('RIGHT')) return true;
       }
       if (key === 'LEFT') {
-         if (this.tankX > 0 && this.input.isDown(key)) return true;
+         if (this._checkObstaclesMap('LEFT')) return true;
       }
       return false;
    }
 
    renderMyTank() {
-      const img = window.resources.get(this.myTank.img);
+      const img = window.resources.getImg(this.myTank.img);
       // реализация поворота в движении
       this.ctx.save();
       // смещаю координаты из угла в центр, поворот и возврат в угол
