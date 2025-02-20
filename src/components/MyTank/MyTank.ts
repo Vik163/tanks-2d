@@ -33,6 +33,7 @@ export class MyTank {
    dir: Dir;
    input: Input;
    _keyRotate: boolean;
+   _delayRotate: number;
 
    constructor(ctx: CanvasRenderingContext2D) {
       this.ctx = ctx;
@@ -49,44 +50,37 @@ export class MyTank {
       this._angle = 0;
       this.map = map_1;
       this._coordCell = { cellX: 0, cellY: 0 };
-      this._keyRotate = true;
+      this._keyRotate = false;
+      this._delayRotate = 150;
    }
 
    update(dt: number) {
-      this._moveTank();
+      // получить координаты клетки на каждой итерации
+      this._getCoordCell();
+      this._moveAndRotateTank();
 
       myTank.coord[0] = this.tankX;
       myTank.coord[1] = this.tankY;
    }
 
    _setTimerRotate() {
-      console.log('w');
-
+      this._keyRotate = true;
       const isTimerRotate = setTimeout(() => {
          this._keyRotate = false;
          clearTimeout(isTimerRotate);
-      }, 200);
+      }, this._delayRotate);
    }
 
-   _moveTank() {
-      if (
-         !this.input.isUp('UP') &&
-         !this.input.isUp('DOWN') &&
-         !this.input.isUp('LEFT') &&
-         !this.input.isUp('RIGHT')
-      )
-         this._keyRotate = false;
-
+   _moveAndRotateTank() {
       // проверка препятствий и плавная остановка
       if (this._checkObstacles('UP') || this._smoothStop('UP')) {
-         if (this.dir !== 'UP' && !this._keyRotate) {
-            this._keyRotate = true;
-
+         // если не совпадают клавиша поворота с направлением
+         // устанаить угол поворота, направление, запустить таймер поворота
+         if (this.dir !== 'UP') {
             this._getAngleRotate('UP');
             this.dir = 'UP';
             this._setTimerRotate();
-         }
-         this._getCoordCell();
+         } // пока работает таймер не двигается
          if (!this._keyRotate) {
             this.tankY -= 0.5;
          }
@@ -94,50 +88,29 @@ export class MyTank {
 
       if (this._checkObstacles('DOWN') || this._smoothStop('DOWN')) {
          if (this.dir !== 'DOWN') {
-            this._keyRotate = true;
-            console.log('d');
             this._getAngleRotate('DOWN');
             this.dir = 'DOWN';
             this._setTimerRotate();
          }
-         this._getCoordCell();
-         if (!this._keyRotate) {
-            console.log('d', this.tankY);
-
-            this.tankY += 0.5;
-         }
+         if (!this._keyRotate) this.tankY += 0.5;
       }
 
       if (this._checkObstacles('RIGHT') || this._smoothStop('RIGHT')) {
          if (this.dir !== 'RIGHT') {
-            this._keyRotate = true;
-            console.log('r');
             this._getAngleRotate('RIGHT');
             this.dir = 'RIGHT';
             this._setTimerRotate();
          }
-         this._getCoordCell();
-         if (!this._keyRotate) {
-            console.log('r', this.tankY);
-
-            this.tankX += 0.5;
-         }
+         if (!this._keyRotate) this.tankX += 0.5;
       }
 
       if (this._checkObstacles('LEFT') || this._smoothStop('LEFT')) {
          if (this.dir !== 'LEFT') {
-            this._keyRotate = true;
-            console.log('l');
             this._getAngleRotate('LEFT');
             this.dir = 'LEFT';
             this._setTimerRotate();
          }
-         this._getCoordCell();
-         if (!this._keyRotate) {
-            console.log('l', this.tankY);
-
-            this.tankX -= 0.5;
-         }
+         if (!this._keyRotate) this.tankX -= 0.5;
       }
    }
 
@@ -158,35 +131,33 @@ export class MyTank {
    _smoothStop(key: Dir) {
       if (key === 'UP') {
          if (
-            Math.floor(this.tankY) - 3 > this._coordCell.cellY &&
+            Math.floor(this.tankY) - 1 > this._coordCell.cellY &&
             this.dir === 'UP'
          )
             return true;
-      }
-      if (key === 'DOWN') {
+      } else if (key === 'DOWN') {
          if (
-            Math.floor(this.tankY) + 1 <
-               this._coordCell.cellY + this.blockHeight - 1 &&
+            Math.floor(this.tankY) > this._coordCell.cellY + 3 &&
+            Math.floor(this.tankY) < this._coordCell.cellY + this.blockHeight &&
             this.dir === 'DOWN'
          )
             return true;
-      }
-      if (key === 'RIGHT') {
+      } else if (key === 'RIGHT') {
          if (
-            Math.floor(this.tankX) - 1 <
-               this._coordCell.cellX + this.blockWidth - 1 &&
+            Math.floor(this.tankX) > this._coordCell.cellX &&
+            Math.floor(this.tankX) < this._coordCell.cellX + this.blockWidth &&
             this.dir === 'RIGHT'
          )
             return true;
-      }
-      if (key === 'LEFT') {
+      } else if (key === 'LEFT') {
          if (
-            Math.floor(this.tankX) + 1 > this._coordCell.cellX &&
+            Math.floor(this.tankX) > this._coordCell.cellX &&
             this.dir === 'LEFT'
          )
             return true;
+      } else {
+         return false;
       }
-      return false;
    }
 
    _checkObstacles(key: string) {

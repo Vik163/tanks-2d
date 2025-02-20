@@ -49,6 +49,7 @@ export class Main {
       this._$('btn_editor')?.addEventListener('click', () => {
          if (!this.keyGame) this.maps.openEditor();
       });
+
       // this.myTank.addListeners();
    }
 
