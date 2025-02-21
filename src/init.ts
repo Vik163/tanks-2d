@@ -5,7 +5,7 @@ import { map_1 } from './constants/maps';
 import { mapsBlocks } from './components/Maps/model/constants/blocks';
 import { InfoBlock } from './components/Maps/model/types/maps';
 import { arrSrcImg } from './constants/images';
-import { arrSounds, soundsLinks } from './constants/sounds';
+import { soundsLinks } from './constants/sounds';
 
 function init() {
    const $ = (id: string) => document.getElementById(id);
@@ -16,22 +16,15 @@ function init() {
 
    const main = new Main();
 
-   let lastTime: number;
-
    initLoadImg();
-   window.resources.loadSound(arrSounds);
-   window.resources.loadImg(arrSrcImg);
+   window.resources.load(arrSrcImg);
 
    function loopGame() {
-      lastTime = Date.now();
-      const now = Date.now();
-      const dt = (now - lastTime) / 1000.0;
       // if (keyGame) {
-      main.update(dt);
+      main.update();
       main.render();
       // }
 
-      lastTime = now;
       requestAnimationFrame(loopGame);
    }
 
@@ -39,7 +32,7 @@ function init() {
       loopGame();
    });
 
-   const tune_1 = window.resources.getSound(soundsLinks.tune_1);
+   const tune_1 = new Audio(soundsLinks.tune_1);
 
    $('btn_start')?.addEventListener('click', () => {
       tune_1.play();
@@ -53,6 +46,8 @@ function init() {
    });
    $('btn_stop')?.addEventListener('click', () => {
       keyGame = main.actionsBtn('STOP');
+      tune_1.pause();
+      tune_1.currentTime = 0;
    });
 
    main.addListeners();

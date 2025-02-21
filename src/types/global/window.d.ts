@@ -3,10 +3,8 @@ export {};
 declare global {
    interface Window {
       resources: {
-         loadImg: (urlOrArr: string | string[]) => void;
-         loadSound: (urlOrArr: string | string[]) => void;
-         getImg: (url: string) => HTMLImageElement;
-         getSound: (url: string) => HTMLAudioElement;
+         load: (urlOrArr: string | string[]) => void;
+         get: (url: string) => HTMLImageElement;
          onReady: (func: () => void) => void;
          isReady: () => boolean;
       };

@@ -57,7 +57,7 @@ export class Maps {
    _initRender() {
       Object.values(this.mapGame).forEach((arr) => {
          arr.forEach((c) => {
-            const img = window.resources.getImg(c.link!);
+            const img = window.resources.get(c.link!);
             this.ctx.drawImage(
                img,
                c.coord[0],
@@ -148,7 +148,7 @@ export class Maps {
 
    _renderBlockbyCursor() {
       if (this.isSelectedBlock) {
-         const img = window.resources.getImg(this.isSelectedBlock.link!);
+         const img = window.resources.get(this.isSelectedBlock.link!);
          this.ctx.drawImage(
             img,
             this.cursor.X,

@@ -8,5 +8,3 @@ export const soundsLinks: Sounds = {
    engine,
    tankFire,
 };
-
-export const arrSounds = [engine, tankFire, tune_1];

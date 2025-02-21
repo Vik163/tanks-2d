@@ -1,4 +1,4 @@
-import { MapGame } from '@/types/map';
+import type { MapGame } from '@/types/map';
 import {
    BLOCK_HEIGHT,
    BLOCK_WIDTH,
@@ -8,7 +8,10 @@ import {
 import { Maps } from '../Maps/Maps';
 import { MyTank } from '../MyTank/MyTank';
 import { soundsLinks } from '@/constants/sounds';
-import { Sounds } from '@/types/sounds';
+import type { Sounds } from '@/types/sounds';
+import type { KeysEvents } from '@/types/handlerEvents';
+import { handlerEventsAndAngle } from '@/lib/handlerEvents';
+import { Shooting } from '../Shooting/Shooting';
 
 export class Main {
    cnv: HTMLCanvasElement;
@@ -26,6 +29,8 @@ export class Main {
    _$: (id: string) => HTMLElement | null;
    myTank: MyTank;
    sounds: Sounds;
+   keys: KeysEvents;
+   shooting: Shooting;
 
    constructor() {
       this._$ = (id: string) => document.getElementById(id)!;
@@ -38,18 +43,16 @@ export class Main {
       this.blockHeight = BLOCK_HEIGHT;
       this.mapGame = JSON.parse(localStorage.getItem('map_1')!);
       this.keyGame = false;
+      this.keys = handlerEventsAndAngle();
       this.btn = document.getElementById('btn_start')!;
       this.intervalId = undefined;
       this.maps = new Maps({ cnv: this.cnv, ctx: this.ctx });
       this.myTank = new MyTank(this.ctx);
       this.sounds = soundsLinks;
+      this.shooting = new Shooting(this.ctx);
    }
 
    addListeners() {
-      // this.$('btn_start')?.addEventListener('click', () => {
-      //    this.actionsBtn('START');
-      // });
-
       this._$('btn_editor')?.addEventListener('click', () => {
          if (!this.keyGame) this.maps.openEditor();
       });
@@ -92,10 +95,9 @@ export class Main {
       return this.keyGame;
    }
 
-   update(dt: number) {
-      this.dt = dt;
-
-      this.myTank.update(dt);
+   update() {
+      this.myTank.update();
+      this.shooting.update();
    }
 
    render() {
@@ -104,6 +106,7 @@ export class Main {
 
       this.maps.renderMap();
       this.myTank.renderMyTank();
+      this.shooting.render();
    }
 }
 // const playerSpeed = 200;

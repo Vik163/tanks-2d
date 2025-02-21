@@ -10,13 +10,7 @@ import {
 import type { MapGame } from '@/types/map';
 import { map_1 } from '@/constants/maps';
 import { soundsLinks } from '@/constants/sounds';
-
-interface Input {
-   isDown: (key: string) => { angle: number; status: boolean };
-   isUp: (key: string) => boolean;
-}
-
-type Dir = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
+import type { Dir, KeysEvents } from '@/types/handlerEvents';
 
 export class MyTank {
    ctx: CanvasRenderingContext2D;
@@ -32,7 +26,7 @@ export class MyTank {
    _angle: number;
    _coordCell: { cellX: number; cellY: number };
    dir: Dir;
-   input: Input;
+   keys: KeysEvents;
    _keyRotate: boolean;
    _delayRotate: number;
    _soundTankEngine: HTMLAudioElement;
@@ -45,7 +39,7 @@ export class MyTank {
       this.blockHeight = BLOCK_HEIGHT;
       this.myTank = myTank;
       this.dir = 'UP';
-      this.input = handlerEventsAndAngle();
+      this.keys = handlerEventsAndAngle();
       this.gameTime = 0;
       this.tankX = myTank.coord[0]; // смещаю из угла в центр
       this.tankY = myTank.coord[1];
@@ -57,7 +51,7 @@ export class MyTank {
       this._soundTankEngine = new Audio(soundsLinks.engine);
    }
 
-   update(dt: number) {
+   update() {
       // получить координаты клетки на каждой итерации
       this._getCoordCell();
       this._moveAndRotateTank();
@@ -68,14 +62,15 @@ export class MyTank {
 
    _setDounds() {
       if (
-         this.input.isDown('UP').status ||
-         this.input.isDown('DOWN').status ||
-         this.input.isDown('LEFT').status ||
-         this.input.isDown('RIGHT').status
+         this.keys.isDown('UP').status ||
+         this.keys.isDown('DOWN').status ||
+         this.keys.isDown('LEFT').status ||
+         this.keys.isDown('RIGHT').status
       ) {
          this._soundTankEngine.play();
       } else {
          this._soundTankEngine.pause();
+         this._soundTankEngine.currentTime = 0;
       }
    }
 
@@ -89,9 +84,9 @@ export class MyTank {
 
    // проверка препятствий и плавная остановка
    _checkMoveTank(key: Dir) {
-      this._angle = this.input.isDown(key).angle;
+      this._angle = this.keys.isDown(key).angle;
       if (
-         (this._checkObstacles(key) && this.input.isDown(key).status) ||
+         (this._checkObstacles(key) && this.keys.isDown(key).status) ||
          this._smoothStop(key)
       )
          return true;
@@ -253,7 +248,7 @@ export class MyTank {
    }
 
    renderMyTank() {
-      const img = window.resources.getImg(this.myTank.img);
+      const img = window.resources.get(this.myTank.img);
       // реализация поворота в движении
       this.ctx.save();
       // смещаю координаты из угла в центр, поворот и возврат в угол
