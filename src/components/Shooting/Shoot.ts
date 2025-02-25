@@ -15,6 +15,7 @@ export class Shoot {
    _angle: number;
    dir: Dir;
    speedFire: number;
+   _timerLink: number;
 
    constructor(
       ctx: CanvasRenderingContext2D,
@@ -33,6 +34,7 @@ export class Shoot {
       this.dir = dir;
       this._angle = angle;
       this.speedFire = 0.9;
+      this._timerLink = 0;
    }
 
    update() {
@@ -53,7 +55,20 @@ export class Shoot {
    }
 
    render() {
-      const img = window.resources.get(this.shoot.fireLink[0]);
+      // изменяющийся огонь
+      let link = this.shoot.fireLink[0];
+      if (this._timerLink > 100) {
+         link = this.shoot.fireLink[1];
+      }
+      if (this._timerLink <= 100) {
+         link = this.shoot.fireLink[0];
+      }
+      if (this._timerLink === 200) {
+         this._timerLink = 0;
+      }
+
+      this._timerLink++;
+      const img = window.resources.get(link);
 
       this.ctx.save();
       // смещаю координаты из угла в центр, поворот и возврат в угол

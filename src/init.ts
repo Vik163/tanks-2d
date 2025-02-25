@@ -15,7 +15,12 @@ function init() {
 
    let keyGame = false;
 
-   const main = new Main();
+   const tune_1 = new Audio(soundsLinks.tune_1);
+   const btnSound = new Audio(soundsLinks.button);
+   const pauseIn = new Audio(soundsLinks.timeStopIn);
+   const pauseOut = new Audio(soundsLinks.timeStopOut);
+
+   const main = new Main(btnSound);
 
    initLoadImg();
    window.resources.load(arrSrcImg);
@@ -33,22 +38,25 @@ function init() {
       loopGame();
    });
 
-   const tune_1 = new Audio(soundsLinks.tune_1);
-
-   $('btn_start')?.addEventListener('click', () => {
+   $('btn_start')?.addEventListener('click', (e) => {
       tune_1.play();
-      keyGame = main.actionsBtn('START');
+      btnSound.play();
+      keyGame = main.actionsBtn('START', pauseIn, pauseOut);
       // Закрыть блок редактора карты при запуске игры
       $('map__grid-btn')?.remove();
       $('editor_nav')?.classList.remove('editor__nav_active');
       mapsBlocks.forEach((i: InfoBlock) => {
          if (i.nameId) $(i.nameId)?.remove();
       });
+      $('btn_start')?.blur(); // для отмены одновременного срабатывания space и click
    });
    $('btn_stop')?.addEventListener('click', () => {
-      keyGame = main.actionsBtn('STOP');
+      btnSound.play();
+
+      keyGame = main.actionsBtn('STOP', pauseIn, pauseOut);
       tune_1.pause();
       tune_1.currentTime = 0;
+      $('btn_stop')?.blur();
    });
 
    main.addListeners();

@@ -25,8 +25,9 @@ export class Maps {
    mapGame: MapGame;
    keyMouse: boolean;
    placesStart: PlacesStart;
+   btnSound: HTMLAudioElement;
 
-   constructor({ cnv, ctx }: CnvProps) {
+   constructor({ cnv, ctx }: CnvProps, btnSound: HTMLAudioElement) {
       this.cnv = cnv;
       this.ctx = ctx;
       this._$ = (id: string) => document.getElementById(id);
@@ -43,6 +44,7 @@ export class Maps {
       };
       this.keyMouse = false;
       this.placesStart = JSON.parse(localStorage.getItem('placesStartMap_1')!);
+      this.btnSound = btnSound;
    }
 
    renderMap() {
@@ -227,7 +229,7 @@ export class Maps {
       } else {
          removeSelect();
 
-         this.blockHTML = this._$(block.part);
+         if (block.nameId) this.blockHTML = this._$(block.nameId);
          addSelect();
       }
    }
@@ -337,6 +339,7 @@ export class Maps {
       this._$('editor_nav')?.appendChild(btnCrid);
 
       btnCrid.addEventListener('click', () => {
+         this.btnSound.play();
          this._handleGrid();
       });
    }
@@ -364,6 +367,7 @@ export class Maps {
       this._$('editor_nav')?.appendChild(btn);
 
       btn.addEventListener('click', (e: MouseEvent) => {
+         this.btnSound.play();
          this._selectBlock(e, bl);
       });
    }

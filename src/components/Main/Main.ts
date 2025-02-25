@@ -29,8 +29,9 @@ export class Main {
    sounds: Sounds;
    keys: KeysEvents;
    shooting: Shooting;
+   btnSound: HTMLAudioElement;
 
-   constructor() {
+   constructor(btnSound: HTMLAudioElement) {
       this._$ = (id: string) => document.getElementById(id)!;
       this.cnv = this._$('canvas') as HTMLCanvasElement;
       this.ctx = this.cnv.getContext('2d') as CanvasRenderingContext2D;
@@ -43,7 +44,8 @@ export class Main {
       this.keys = handlerParameters();
       this.btn = document.getElementById('btn_start')!;
       this.intervalId = undefined;
-      this.maps = new Maps({ cnv: this.cnv, ctx: this.ctx });
+      this.btnSound = btnSound;
+      this.maps = new Maps({ cnv: this.cnv, ctx: this.ctx }, btnSound);
       this.myTank = new MyTank(this.ctx);
       this.sounds = soundsLinks;
       this.shooting = new Shooting(this.ctx);
@@ -51,11 +53,16 @@ export class Main {
 
    addListeners() {
       this._$('btn_editor')?.addEventListener('click', () => {
+         this.btnSound.play();
          if (!this.keyGame) this.maps.openEditor();
       });
    }
 
-   actionsBtn(act: string) {
+   actionsBtn(
+      act: string,
+      pauseIn: HTMLAudioElement,
+      pauseOut: HTMLAudioElement,
+   ) {
       if (act === 'START') {
          if (this.btn.textContent === 'START') {
             this.keyGame = true;
@@ -64,8 +71,10 @@ export class Main {
          } else {
             if (this.btn.textContent === 'PAUSE') {
                this.btn.textContent = 'PAUSE*';
+               pauseIn.play();
             } else {
                this.btn.textContent = 'PAUSE';
+               pauseOut.play();
             }
             if (!this.intervalId) {
                this.intervalId = setInterval(() => {
