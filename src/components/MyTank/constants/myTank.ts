@@ -5,6 +5,7 @@ import type { IMyTank } from '../types/myTank';
 export const myTank: IMyTank = {
    img: tank,
    imgHit: tankHit,
+   dir: 'UP',
    stars: 0,
    level: 1,
    hits: 0,

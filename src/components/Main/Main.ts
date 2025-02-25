@@ -9,8 +9,8 @@ import { Maps } from '../Maps/Maps';
 import { MyTank } from '../MyTank/MyTank';
 import { soundsLinks } from '@/constants/sounds';
 import type { Sounds } from '@/types/sounds';
-import type { KeysEvents } from '@/types/handlerEvents';
-import { handlerEventsAndAngle } from '@/lib/handlerEvents';
+import type { KeysEvents } from '@/types/main';
+import { handlerParameters } from '@/lib/handlerParameters';
 import { Shooting } from '../Shooting/Shooting';
 
 export class Main {
@@ -43,7 +43,7 @@ export class Main {
       this.blockHeight = BLOCK_HEIGHT;
       this.mapGame = JSON.parse(localStorage.getItem('map_1')!);
       this.keyGame = false;
-      this.keys = handlerEventsAndAngle();
+      this.keys = handlerParameters();
       this.btn = document.getElementById('btn_start')!;
       this.intervalId = undefined;
       this.maps = new Maps({ cnv: this.cnv, ctx: this.ctx });
