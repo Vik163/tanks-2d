@@ -7,7 +7,7 @@ import {
 import { mapsBlocks } from './model/constants/blocks';
 import type { InfoBlock } from './model/types/maps';
 import type { CnvProps } from '@/types/main';
-import type { MapGame } from '@/types/map';
+import type { Block, MapGame, PlacesStart } from '@/types/map';
 
 export class Maps {
    cnv: HTMLCanvasElement;
@@ -24,6 +24,7 @@ export class Maps {
    cursor: { X: number; Y: number };
    mapGame: MapGame;
    keyMouse: boolean;
+   placesStart: PlacesStart;
 
    constructor({ cnv, ctx }: CnvProps) {
       this.cnv = cnv;
@@ -41,9 +42,12 @@ export class Maps {
          Y: 0,
       };
       this.keyMouse = false;
+      this.placesStart = JSON.parse(localStorage.getItem('placesStartMap_1')!);
    }
 
    renderMap() {
+      this.mapGame = JSON.parse(localStorage.getItem('map_1')!);
+
       // карта из localStorage
       this._initRender();
       // cетка
@@ -54,10 +58,22 @@ export class Maps {
       }
    }
 
+   _getImg(bl: Block) {
+      let link: string = '';
+
+      if (bl.countHit === 1) link = bl.linkHit1 ? bl.linkHit1 : '';
+
+      if (bl.countHit > 1) link = bl.linkDel ? bl.linkDel : '';
+
+      if (bl.countHit === 0) link = bl.link ? bl.link : '';
+      return link;
+   }
+
    _initRender() {
       Object.values(this.mapGame).forEach((arr) => {
          arr.forEach((c) => {
-            const img = window.resources.get(c.link!);
+            const link = c.type === 'bricks' ? this._getImg(c) : c.link;
+            const img = window.resources.get(link!);
             this.ctx.drawImage(
                img,
                c.coord[0],
@@ -66,6 +82,16 @@ export class Maps {
                this.blockHeight,
             );
          });
+      });
+      this.placesStart?.forEach((pl) => {
+         const img = window.resources.get(pl.link!);
+         this.ctx.drawImage(
+            img,
+            pl.coord[0],
+            pl.coord[1],
+            this.blockWidth,
+            this.blockHeight,
+         );
       });
    }
 
@@ -93,38 +119,57 @@ export class Maps {
                (c) => c.coord[0] !== cellsCoordW,
             );
 
+            this.placesStart = this.placesStart.filter(
+               (pl) =>
+                  pl.coord[0] !== cellsCoordW || pl.type === 'placeMyStart',
+            );
+
             this.mapGame = {
                ...this.mapGame,
                [cellsCoordH]: arr,
             };
          } else {
             // иначе создаем новый
-            const newBlock = {
-               name: this.isSelectedBlock?.name,
+            const newBlock: Block = {
+               part: 'map',
                link: this.isSelectedBlock?.link,
+               nameId: this.isSelectedBlock?.nameId,
+               linkHit1: this.isSelectedBlock?.linkHit1,
+               linkHit2: this.isSelectedBlock?.linkHit2,
+               linkDel: this.isSelectedBlock?.linkDel,
                countHit: 0,
                type: this.isSelectedBlock?.type,
                coord: [cellsCoordW, cellsCoordH],
             };
 
-            if (this.mapGame[cellsCoordH]) {
-               this.mapGame[cellsCoordH].push(newBlock);
-            } else {
-               this.mapGame = {
-                  ...this.mapGame,
-                  [cellsCoordH]: [newBlock],
-               };
+            // либо блоки, либо места старта
+            if (newBlock.type === 'placeStart') {
+               this.placesStart.push(newBlock);
+            } else if (newBlock.type !== 'placeMyStart') {
+               if (this.mapGame[cellsCoordH]) {
+                  this.mapGame[cellsCoordH].push(newBlock);
+               } else {
+                  this.mapGame = {
+                     ...this.mapGame,
+                     [cellsCoordH]: [newBlock],
+                  };
+               }
             }
          }
 
          localStorage.setItem('map_1', JSON.stringify(this.mapGame));
+         localStorage.setItem(
+            'placesStartMap_1',
+            JSON.stringify(this.placesStart),
+         );
       }
    }
 
    // проверка на существующий блок
    _checkCoordBlock(w: number, h: number): boolean {
       return !!(
-         this.mapGame[h] && this.mapGame[h].some((c) => c.coord[0] === w)
+         (this.mapGame[h] && this.mapGame[h].some((c) => c.coord[0] === w)) ||
+         this.placesStart.some((pl) => pl.coord[0] === w)
       );
    }
 
@@ -182,7 +227,7 @@ export class Maps {
       } else {
          removeSelect();
 
-         this.blockHTML = this._$(block.name);
+         this.blockHTML = this._$(block.part);
          addSelect();
       }
    }
@@ -298,7 +343,7 @@ export class Maps {
 
    // удаление слушателей и блоков инфо
    _deleteBlockInfo(bl: InfoBlock) {
-      const btn = this._$(bl.name);
+      const btn = this._$(bl.nameId ? bl.nameId : '');
 
       btn?.removeEventListener('click', (e: MouseEvent) => {
          this._selectBlock(e, bl);
@@ -309,9 +354,11 @@ export class Maps {
    // установка атрибутов, слушателей и вставка блоков инфо
    _createBlockInfo(bl: InfoBlock) {
       const btn = document.createElement('img');
-      btn.setAttribute('src', bl.link);
-      btn.setAttribute('id', bl.name);
-      btn.setAttribute('alt', bl.name);
+      if (bl.link) btn.setAttribute('src', bl.link);
+      if (bl.nameId) {
+         btn.setAttribute('id', bl.nameId);
+         btn.setAttribute('alt', bl.nameId);
+      }
       btn.classList.add('editor__nav-btn');
 
       this._$('editor_nav')?.appendChild(btn);

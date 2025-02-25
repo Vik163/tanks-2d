@@ -8,7 +8,7 @@ import {
    CANVAS_WIDTH,
    directions,
 } from '@/constants/init';
-import type { MapGame } from '@/types/map';
+import type { Block, MapGame } from '@/types/map';
 import { map_1 } from '@/constants/maps';
 import { soundsLinks } from '@/constants/sounds';
 import type { Dir, KeysEvents } from '@/types/main';
@@ -38,7 +38,7 @@ export class MyTank {
       x: number,
       y: number,
       type: string,
-   ) => boolean | undefined;
+   ) => Block | boolean;
 
    constructor(ctx: CanvasRenderingContext2D) {
       this.ctx = ctx;
@@ -108,14 +108,9 @@ export class MyTank {
 
    // проверка препятствий и плавная остановка
    _checkMoveTank(key: Dir) {
-      const isCollision = this.checkCollisions(
-         key,
-         this.tankX,
-         this.tankY,
-         'tank',
-      );
       if (
-         (this.keys.isDown(key).status && !isCollision) ||
+         (this.keys.isDown(key).status &&
+            !this.checkCollisions(key, this.tankX, this.tankY, 'tank')) ||
          this._smoothStop(key)
       )
          return true;

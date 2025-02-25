@@ -1,7 +1,7 @@
 import { initLoadImg } from './lib/ImagesLoad';
 import { Main } from './components/Main/Main';
 import './index.css';
-import { map_1 } from './constants/maps';
+import { map_1, placesStartMap_1 } from './constants/maps';
 import { mapsBlocks } from './components/Maps/model/constants/blocks';
 import { InfoBlock } from './components/Maps/model/types/maps';
 import { arrSrcImg } from './constants/images';
@@ -11,6 +11,7 @@ function init() {
    const $ = (id: string) => document.getElementById(id);
 
    localStorage.setItem('map_1', JSON.stringify(map_1));
+   localStorage.setItem('placesStartMap_1', JSON.stringify(placesStartMap_1));
 
    let keyGame = false;
 
@@ -41,7 +42,7 @@ function init() {
       $('map__grid-btn')?.remove();
       $('editor_nav')?.classList.remove('editor__nav_active');
       mapsBlocks.forEach((i: InfoBlock) => {
-         $(i.name)?.remove();
+         if (i.nameId) $(i.nameId)?.remove();
       });
    });
    $('btn_stop')?.addEventListener('click', () => {

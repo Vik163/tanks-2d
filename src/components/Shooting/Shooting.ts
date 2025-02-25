@@ -9,7 +9,7 @@ import {
    CANVAS_HEIGHT,
    CANVAS_WIDTH,
 } from '@/constants/init';
-import type { MapGame } from '@/types/map';
+import type { Block, MapGame } from '@/types/map';
 import { map_1 } from '@/constants/maps';
 import { checkCollisions } from '@/lib/checkCollisions';
 
@@ -28,7 +28,7 @@ export class Shooting {
    map: MapGame;
    fireX: number;
    fireY: number;
-   checkCollisions: (key: string, x: number, y: number) => boolean | undefined;
+   checkCollisions: (key: string, x: number, y: number) => Block | boolean;
    delayFire: number;
 
    constructor(ctx: CanvasRenderingContext2D) {
@@ -40,7 +40,7 @@ export class Shooting {
       this.shooting = [];
       this.keys = handlerParameters();
       this.timer = 0;
-      this.delayFire = 400;
+      this.delayFire = 350;
       this._soundTankFire = new Audio(soundsLinks.tankFire);
       this.dir = myTank.dir;
       this._coordCell = { cellX: 0, cellY: 0 };
@@ -52,11 +52,10 @@ export class Shooting {
    }
 
    update() {
-      // console.log('myTank.dir:', myTank.dir);
+      // console.log('his.shooting:', this.shooting);
 
       this._deleteFires();
       this._createFires();
-      console.log('this.shooting:', this.shooting);
    }
 
    _createFires() {
@@ -68,7 +67,6 @@ export class Shooting {
             this.dir = myTank.dir;
 
             // создает новый выстрел
-            // console.log('myTank.coord[1]:', myTank.coord[1]);
             const newShoot = new Shoot(
                this.ctx,
                myTank.coord[0],
@@ -101,17 +99,32 @@ export class Shooting {
             this.fireX = fireX;
             this.fireY = fireY;
             // проверка столкновений
-            const isCollision = this.checkCollisions(
+            const nodeCollision = this.checkCollisions(
                this.dir,
                this.fireX,
                this.fireY,
             );
 
-            if (isCollision) {
+            if (nodeCollision) {
+               this._hitNode(nodeCollision);
                return false;
             }
             return true;
          });
+      }
+   }
+
+   _hitNode(node: Block | boolean) {
+      if (typeof node !== 'boolean' && node.part === 'map') {
+         const arr = this.map[node.coord[1]].map((nd) => {
+            if (node.type === 'bricks' && nd.coord[0] === node.coord[0])
+               nd.countHit++;
+            return nd;
+         });
+
+         this.map = { ...this.map, [node.coord[1]]: arr };
+
+         localStorage.setItem('map_1', JSON.stringify(this.map));
       }
    }
 
