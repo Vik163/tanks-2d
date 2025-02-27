@@ -17,7 +17,6 @@ export const buildPlugins = (options: BuildOptions) => {
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
       template: paths.html,
-      favicon: paths.favicon
     }),
     // кольцевые зависимости
     new CircularDependencyPlugin({

@@ -7,10 +7,9 @@ const path = require('path');
 export default (env: BuildEnv) => {
    const paths: BuildPaths = {
       entry: path.resolve(__dirname, './src/init.ts'),
-      build: path.resolve(__dirname, './build'),
-      html: path.resolve(__dirname, './src/index.html'),
+      build: path.resolve(__dirname, 'build'),
+      html: path.resolve(__dirname, 'public', 'index.html'),
       src: path.resolve(__dirname, './src'),
-      favicon: path.resolve(__dirname, './src/assets/icons/tank_icon.png'),
    };
 
    const mode = env.mode || 'development';

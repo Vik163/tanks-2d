@@ -17,7 +17,7 @@ export const buildWebpackConfig = (
     entry: paths.entry,
     output: {
       path: paths.build,
-      filename: '[name].[contenthash].js',
+      filename: 'main.js',
       clean: true,
       publicPath: '/'
     },
