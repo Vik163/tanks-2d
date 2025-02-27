@@ -2,7 +2,12 @@ import { handlerParameters } from '@/lib/handlerParameters';
 import { shootTank } from './constants/shoot';
 import { ShootTank } from './types/shoot';
 import { Dir, KeysEvents } from '@/types/main';
-import { BLOCK_HEIGHT, BLOCK_WIDTH } from '@/constants/init';
+import {
+   BLOCK_HEIGHT,
+   BLOCK_HEIGHT_MOBILE,
+   BLOCK_WIDTH,
+   BLOCK_WIDTH_MOBILE,
+} from '@/constants/init';
 
 export class Shoot {
    ctx: CanvasRenderingContext2D;
@@ -16,6 +21,7 @@ export class Shoot {
    dir: Dir;
    speedFire: number;
    _timerLink: number;
+   isMobile: boolean;
 
    constructor(
       ctx: CanvasRenderingContext2D,
@@ -23,11 +29,12 @@ export class Shoot {
       tankY: number,
       dir: Dir,
       angle: number,
+      isMobile: boolean,
    ) {
       this.ctx = ctx;
       this.shoot = shootTank;
-      this.blockWidth = BLOCK_WIDTH;
-      this.blockHeight = BLOCK_HEIGHT;
+      this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
+      this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
       this.keys = handlerParameters();
       this.fireX = tankX;
       this.fireY = tankY;
@@ -35,6 +42,7 @@ export class Shoot {
       this._angle = angle;
       this.speedFire = 0.9;
       this._timerLink = 0;
+      this.isMobile = isMobile;
    }
 
    update() {

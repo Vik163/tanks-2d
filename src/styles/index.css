@@ -1,0 +1,35 @@
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: 'Lilita One', serif;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   text-rendering: geometricPrecision;
+   outline: 0;
+   outline-style: none;
+   -moz-outline-style: none;
+   -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+   width: 100vw;
+   height: 100vh;
+   background-color: #242121;
+   display: flex;
+   justify-content: center;
+}
+
+.main {
+   width: fit-content;
+   height: fit-content;
+   position: relative;
+   border-radius: 5px;
+}
+
+@import url(./header/header.css);
+@import url(./header/header_adapt.css);
+@import url(./canvas/canvas.css);
+@import url(./editor/editor.css);
+@import url(./editor/editor_adapt.css);
+@import url(./canvas/canvas_adapt.css);

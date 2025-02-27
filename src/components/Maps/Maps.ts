@@ -1,8 +1,12 @@
 import {
    BLOCK_HEIGHT,
+   BLOCK_HEIGHT_MOBILE,
    BLOCK_WIDTH,
+   BLOCK_WIDTH_MOBILE,
    CANVAS_HEIGHT,
+   CANVAS_HEIGHT_MOBILE,
    CANVAS_WIDTH,
+   CANVAS_WIDTH_MOBILE,
 } from '@/constants/init';
 import { mapsBlocks } from './model/constants/blocks';
 import type { InfoBlock } from './model/types/maps';
@@ -26,16 +30,21 @@ export class Maps {
    keyMouse: boolean;
    placesStart: PlacesStart;
    btnSound: HTMLAudioElement;
+   isMobile: boolean;
 
-   constructor({ cnv, ctx }: CnvProps, btnSound: HTMLAudioElement) {
+   constructor(
+      { cnv, ctx }: CnvProps,
+      btnSound: HTMLAudioElement,
+      isMobile: boolean,
+   ) {
       this.cnv = cnv;
       this.ctx = ctx;
       this._$ = (id: string) => document.getElementById(id);
       this.colorLine = 'rgb(1, 159, 1)';
-      this.cnvWidth = CANVAS_WIDTH;
-      this.blockWidth = BLOCK_WIDTH;
-      this.cnvHeight = CANVAS_HEIGHT;
-      this.blockHeight = BLOCK_HEIGHT;
+      this.cnvWidth = isMobile ? CANVAS_WIDTH_MOBILE : CANVAS_WIDTH;
+      this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
+      this.cnvHeight = isMobile ? CANVAS_HEIGHT_MOBILE : CANVAS_HEIGHT;
+      this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
       this._keyOpenGrid = false;
       this.mapGame = JSON.parse(localStorage.getItem('map_1')!);
       this.cursor = {
@@ -45,6 +54,7 @@ export class Maps {
       this.keyMouse = false;
       this.placesStart = JSON.parse(localStorage.getItem('placesStartMap_1')!);
       this.btnSound = btnSound;
+      this.isMobile = isMobile;
    }
 
    renderMap() {
@@ -74,23 +84,27 @@ export class Maps {
    _initRender() {
       Object.values(this.mapGame).forEach((arr) => {
          arr.forEach((c) => {
+            const coord = this.isMobile ? c.coordMob : c.coord;
             const link = c.type === 'bricks' ? this._getImg(c) : c.link;
             const img = window.resources.get(link!);
             this.ctx.drawImage(
                img,
-               c.coord[0],
-               c.coord[1],
+               coord[0],
+               coord[1],
                this.blockWidth,
                this.blockHeight,
             );
          });
       });
+
       this.placesStart?.forEach((pl) => {
+         const coord = this.isMobile ? pl.coordMob : pl.coord;
+
          const img = window.resources.get(pl.link!);
          this.ctx.drawImage(
             img,
-            pl.coord[0],
-            pl.coord[1],
+            coord[0],
+            coord[1],
             this.blockWidth,
             this.blockHeight,
          );
@@ -142,6 +156,7 @@ export class Maps {
                countHit: 0,
                type: this.isSelectedBlock?.type,
                coord: [cellsCoordW, cellsCoordH],
+               coordMob: [cellsCoordW, cellsCoordH],
             };
 
             // либо блоки, либо места старта

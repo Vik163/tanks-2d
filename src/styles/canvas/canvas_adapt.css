@@ -1,0 +1,18 @@
+@media screen and (max-width: 1000px) {
+   .cnv__container {
+      display: flex;
+      width: 475px;
+      height: 400px;
+      border: 2px solid #ba822c;
+      background: url(../../assets/images/maps/tiles_block.png);
+      border-radius: 5px;
+   }
+
+   .cnv__info {
+      height: 100%;
+      width: 135px;
+      padding-left: 2px;
+      background: url(../../assets/images/maps/info_block.png) no-repeat center;
+      background-size: 97% 97%;
+   }
+}

@@ -1,0 +1,40 @@
+.editor__nav {
+   position: absolute;
+   padding: 30px 10px;
+   top: 47px;
+   right: -84px;
+   display: none;
+   border: 2px solid #ba822c;
+   background: url(../../assets/images/maps/tiles_block.png);
+
+   border-radius: 10px;
+   flex-direction: column;
+   align-items: center;
+   gap: 20px;
+}
+
+.editor__nav_active {
+   display: flex;
+}
+
+.editor__nav-btn {
+   cursor: pointer;
+}
+
+.map__grid-btn {
+   width: 55px;
+   height: 40px;
+   cursor: pointer;
+   background-color: #ba822c;
+}
+
+.editor__nav-btn {
+   width: 55px;
+   border-radius: 15px;
+   padding: 8px;
+}
+
+.editor__nav-btn_active {
+   box-shadow: 0 0 1px 1px #ba822c;
+   background-color: rgb(71, 69, 67);
+}

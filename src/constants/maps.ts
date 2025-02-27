@@ -9,6 +9,7 @@ import type { MapGame, PlacesStart } from '@/types/map';
 export const placesStartMap_1: PlacesStart = [
    {
       coord: [900, 0],
+      coordMob: [450, 0],
       countHit: 0,
       link: placeStart,
       part: 'map',
@@ -17,6 +18,7 @@ export const placesStartMap_1: PlacesStart = [
    },
    {
       coord: [400, 50],
+      coordMob: [200, 25],
       countHit: 0,
       link: placeStart,
       part: 'map',
@@ -29,6 +31,7 @@ export const placesStartMap_1: PlacesStart = [
       countHit: 0,
       type: 'placeStart',
       coord: [50, 150],
+      coordMob: [25, 0],
       nameId: 'placeStart',
    },
    {
@@ -37,10 +40,12 @@ export const placesStartMap_1: PlacesStart = [
       countHit: 0,
       type: 'placeStart',
       coord: [850, 150],
+      coordMob: [425, 75],
       nameId: 'placeStart',
    },
    {
       coord: [550, 750],
+      coordMob: [275, 375],
       countHit: 0,
       link: placeStart,
       part: 'map',
@@ -60,6 +65,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [150, 0],
+         coordMob: [75, 0],
       },
       {
          part: 'map',
@@ -70,6 +76,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [200, 0],
+         coordMob: [100, 0],
       },
       {
          part: 'map',
@@ -80,6 +87,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [250, 0],
+         coordMob: [125, 0],
       },
       {
          part: 'map',
@@ -90,6 +98,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [600, 0],
+         coordMob: [300, 0],
       },
       {
          part: 'map',
@@ -100,6 +109,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [650, 0],
+         coordMob: [325, 0],
       },
       {
          part: 'map',
@@ -110,6 +120,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [700, 0],
+         coordMob: [350, 0],
       },
    ],
    '50': [
@@ -122,6 +133,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [450, 50],
+         coordMob: [225, 25],
       },
    ],
    '100': [
@@ -134,6 +146,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [0, 100],
+         coordMob: [0, 50],
       },
       {
          part: 'map',
@@ -142,6 +155,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [50, 100],
+         coordMob: [25, 50],
       },
       {
          part: 'map',
@@ -152,6 +166,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [100, 100],
+         coordMob: [50, 50],
       },
       {
          part: 'map',
@@ -162,6 +177,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [150, 100],
+         coordMob: [75, 50],
       },
       {
          part: 'map',
@@ -172,6 +188,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [350, 100],
+         coordMob: [175, 50],
       },
       {
          part: 'map',
@@ -182,6 +199,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [400, 100],
+         coordMob: [200, 50],
       },
       {
          part: 'map',
@@ -190,6 +208,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [450, 100],
+         coordMob: [225, 50],
       },
       {
          part: 'map',
@@ -200,6 +219,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [500, 100],
+         coordMob: [250, 50],
       },
       {
          part: 'map',
@@ -210,6 +230,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [550, 100],
+         coordMob: [275, 50],
       },
       {
          part: 'map',
@@ -220,6 +241,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [750, 100],
+         coordMob: [375, 50],
       },
       {
          part: 'map',
@@ -230,6 +252,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [800, 100],
+         coordMob: [400, 50],
       },
       {
          part: 'map',
@@ -238,6 +261,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [850, 100],
+         coordMob: [425, 50],
       },
       {
          part: 'map',
@@ -248,6 +272,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [900, 100],
+         coordMob: [450, 50],
       },
    ],
    '150': [
@@ -258,6 +283,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [0, 150],
+         coordMob: [900, 0],
       },
 
       {
@@ -269,6 +295,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [150, 150],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -279,6 +306,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [200, 150],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -289,6 +317,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [250, 150],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -299,6 +328,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [450, 150],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -309,6 +339,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [650, 150],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -319,6 +350,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [700, 150],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -329,6 +361,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [750, 150],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -337,6 +370,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [900, 150],
+         coordMob: [900, 0],
       },
    ],
    '200': [
@@ -347,6 +381,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [200, 200],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -357,6 +392,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [250, 200],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -367,6 +403,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [450, 200],
+         coordMob: [900, 0],
       },
 
       {
@@ -378,6 +415,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [650, 200],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -386,6 +424,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [700, 200],
+         coordMob: [900, 0],
       },
    ],
    '250': [
@@ -398,6 +437,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [250, 250],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -408,6 +448,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [350, 250],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -418,6 +459,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [400, 250],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -428,6 +470,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [450, 250],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -438,6 +481,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [500, 250],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -448,6 +492,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [550, 250],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -458,6 +503,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [650, 250],
+         coordMob: [900, 0],
       },
    ],
    '300': [
@@ -470,6 +516,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [250, 300],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -480,6 +527,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [300, 300],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -490,6 +538,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [350, 300],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -500,6 +549,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [450, 300],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -510,6 +560,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [550, 300],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -520,6 +571,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [600, 300],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -530,6 +582,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [650, 300],
+         coordMob: [900, 0],
       },
    ],
    '350': [
@@ -542,6 +595,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [100, 350],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -552,6 +606,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [150, 350],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -562,6 +617,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [750, 350],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -572,6 +628,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [800, 350],
+         coordMob: [900, 0],
       },
    ],
    '400': [
@@ -584,6 +641,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [0, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -594,6 +652,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [50, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -604,6 +663,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [100, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -614,6 +674,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [150, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -624,6 +685,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [200, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -634,6 +696,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [250, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -644,6 +707,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [300, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -654,6 +718,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [350, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -664,6 +729,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [400, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -672,6 +738,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [450, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -682,6 +749,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [500, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -692,6 +760,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [550, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -702,6 +771,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [600, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -712,6 +782,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [650, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -722,6 +793,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [700, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -732,6 +804,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [750, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -742,6 +815,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [800, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -752,6 +826,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [850, 400],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -762,6 +837,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [900, 400],
+         coordMob: [900, 0],
       },
    ],
    '450': [
@@ -772,6 +848,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [350, 450],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -780,6 +857,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [450, 450],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -788,6 +866,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [550, 450],
+         coordMob: [900, 0],
       },
    ],
    '500': [
@@ -800,6 +879,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [150, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -810,6 +890,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [200, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -820,6 +901,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [250, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -830,6 +912,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [300, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -838,6 +921,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [350, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -846,6 +930,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [550, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -856,6 +941,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [600, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -866,6 +952,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [650, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -876,6 +963,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [700, 500],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -886,6 +974,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [750, 500],
+         coordMob: [900, 0],
       },
    ],
    '550': [
@@ -898,6 +987,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [150, 550],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -908,6 +998,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [350, 550],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -918,6 +1009,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [550, 550],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -928,6 +1020,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [750, 550],
+         coordMob: [900, 0],
       },
    ],
    '600': [
@@ -938,6 +1031,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [50, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -948,6 +1042,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [100, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -958,6 +1053,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [150, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -968,6 +1064,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [300, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -978,6 +1075,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [350, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -986,6 +1084,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [400, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -994,6 +1093,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [450, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1002,6 +1102,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [500, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1012,6 +1113,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [550, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1022,6 +1124,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [600, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1032,6 +1135,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [750, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1042,6 +1146,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [800, 600],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1050,6 +1155,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [850, 600],
+         coordMob: [900, 0],
       },
    ],
    '650': [
@@ -1062,6 +1168,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [50, 650],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1070,6 +1177,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [100, 650],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1078,6 +1186,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [800, 650],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1088,6 +1197,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [850, 650],
+         coordMob: [900, 0],
       },
    ],
    '700': [
@@ -1098,6 +1208,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [0, 700],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1108,6 +1219,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [50, 700],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1116,6 +1228,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [300, 700],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1126,6 +1239,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [400, 700],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1136,6 +1250,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [450, 700],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1146,6 +1261,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [500, 700],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1154,6 +1270,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [600, 700],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1164,6 +1281,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [850, 700],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1172,6 +1290,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [900, 700],
+         coordMob: [900, 0],
       },
    ],
    '750': [
@@ -1184,6 +1303,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [0, 750],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1194,6 +1314,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [50, 750],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1202,6 +1323,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [300, 750],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1212,6 +1334,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [400, 750],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1220,6 +1343,7 @@ export const map_1: MapGame = {
          nameId: 'headquarters',
          type: 'headquarters',
          coord: [450, 750],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1230,6 +1354,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [500, 750],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1238,6 +1363,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'concrete',
          coord: [600, 750],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1248,6 +1374,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [850, 750],
+         coordMob: [900, 0],
       },
       {
          part: 'map',
@@ -1258,6 +1385,7 @@ export const map_1: MapGame = {
          countHit: 0,
          type: 'bricks',
          coord: [900, 750],
+         coordMob: [900, 0],
       },
    ],
 };

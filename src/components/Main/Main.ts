@@ -1,8 +1,12 @@
 import {
    BLOCK_HEIGHT,
+   BLOCK_HEIGHT_MOBILE,
    BLOCK_WIDTH,
+   BLOCK_WIDTH_MOBILE,
    CANVAS_HEIGHT,
+   CANVAS_HEIGHT_MOBILE,
    CANVAS_WIDTH,
+   CANVAS_WIDTH_MOBILE,
 } from '@/constants/init';
 import { Maps } from '../Maps/Maps';
 import { MyTank } from '../MyTank/MyTank';
@@ -30,25 +34,31 @@ export class Main {
    keys: KeysEvents;
    shooting: Shooting;
    btnSound: HTMLAudioElement;
+   isMobile: boolean;
 
-   constructor(btnSound: HTMLAudioElement) {
+   constructor(btnSound: HTMLAudioElement, isMobile: boolean) {
       this._$ = (id: string) => document.getElementById(id)!;
       this.cnv = this._$('canvas') as HTMLCanvasElement;
       this.ctx = this.cnv.getContext('2d') as CanvasRenderingContext2D;
       this.dt = 0;
-      this.cnvWidth = CANVAS_WIDTH;
-      this.cnvHeight = CANVAS_HEIGHT;
-      this.blockWidth = BLOCK_WIDTH;
-      this.blockHeight = BLOCK_HEIGHT;
+      this.cnvWidth = isMobile ? CANVAS_WIDTH_MOBILE : CANVAS_WIDTH;
+      this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
+      this.cnvHeight = isMobile ? CANVAS_HEIGHT_MOBILE : CANVAS_HEIGHT;
+      this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
       this.keyGame = false;
       this.keys = handlerParameters();
       this.btn = document.getElementById('btn_start')!;
       this.intervalId = undefined;
       this.btnSound = btnSound;
-      this.maps = new Maps({ cnv: this.cnv, ctx: this.ctx }, btnSound);
-      this.myTank = new MyTank(this.ctx);
+      this.maps = new Maps(
+         { cnv: this.cnv, ctx: this.ctx },
+         btnSound,
+         isMobile,
+      );
+      this.myTank = new MyTank(this.ctx, isMobile);
       this.sounds = soundsLinks;
-      this.shooting = new Shooting(this.ctx);
+      this.shooting = new Shooting(this.ctx, isMobile);
+      this.isMobile = isMobile;
    }
 
    addListeners() {

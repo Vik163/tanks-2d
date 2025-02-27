@@ -1,6 +1,6 @@
 import { initLoadImg } from './lib/ImagesLoad';
 import { Main } from './components/Main/Main';
-import './index.css';
+import './styles/index.css';
 import { map_1, placesStartMap_1 } from './constants/maps';
 import { mapsBlocks } from './components/Maps/model/constants/blocks';
 import { InfoBlock } from './components/Maps/model/types/maps';
@@ -9,6 +9,7 @@ import { soundsLinks } from './constants/sounds';
 
 function init() {
    const $ = (id: string) => document.getElementById(id);
+   const isMobile = window.matchMedia('(max-width: 1000px)').matches;
 
    localStorage.setItem('map_1', JSON.stringify(map_1));
    localStorage.setItem('placesStartMap_1', JSON.stringify(placesStartMap_1));
@@ -20,7 +21,7 @@ function init() {
    const pauseIn = new Audio(soundsLinks.timeStopIn);
    const pauseOut = new Audio(soundsLinks.timeStopOut);
 
-   const main = new Main(btnSound);
+   const main = new Main(btnSound, isMobile);
 
    initLoadImg();
    window.resources.load(arrSrcImg);

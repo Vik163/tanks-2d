@@ -18,6 +18,7 @@ export interface Block {
    countHit: number;
    type: TypesBlocks;
    coord: number[];
+   coordMob: number[];
 }
 
 export type PlacesStart = Block[];

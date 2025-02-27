@@ -5,9 +5,13 @@ import { soundsLinks } from '@/constants/sounds';
 import { handlerParameters } from '@/lib/handlerParameters';
 import {
    BLOCK_HEIGHT,
+   BLOCK_HEIGHT_MOBILE,
    BLOCK_WIDTH,
+   BLOCK_WIDTH_MOBILE,
    CANVAS_HEIGHT,
+   CANVAS_HEIGHT_MOBILE,
    CANVAS_WIDTH,
+   CANVAS_WIDTH_MOBILE,
 } from '@/constants/init';
 import type { Block, MapGame } from '@/types/map';
 import { map_1 } from '@/constants/maps';
@@ -30,13 +34,14 @@ export class Shooting {
    fireY: number;
    checkCollisions: (key: string, x: number, y: number) => Block | boolean;
    delayFire: number;
+   isMobile: boolean;
 
-   constructor(ctx: CanvasRenderingContext2D) {
+   constructor(ctx: CanvasRenderingContext2D, isMobile: boolean) {
       this.ctx = ctx;
-      this.cnvWidth = CANVAS_WIDTH;
-      this.cnvHeight = CANVAS_HEIGHT;
-      this.blockWidth = BLOCK_WIDTH;
-      this.blockHeight = BLOCK_HEIGHT;
+      this.cnvWidth = isMobile ? CANVAS_WIDTH_MOBILE : CANVAS_WIDTH;
+      this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
+      this.cnvHeight = isMobile ? CANVAS_HEIGHT_MOBILE : CANVAS_HEIGHT;
+      this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
       this.shooting = [];
       this.keys = handlerParameters();
       this.timer = 0;
@@ -49,6 +54,7 @@ export class Shooting {
       this.fireY = myTank.coord[1];
       this.checkCollisions = () =>
          checkCollisions(this.dir, this.fireX, this.fireY, 'fire');
+      this.isMobile = isMobile;
    }
 
    update() {
@@ -73,6 +79,7 @@ export class Shooting {
                myTank.coord[1],
                this.dir,
                this.keys.isDown(this.dir).angle,
+               this.isMobile,
             );
 
             this.shooting.push(newShoot);

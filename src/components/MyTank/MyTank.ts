@@ -3,9 +3,13 @@ import { myTank } from './constants/myTank';
 import type { IMyTank } from './types/myTank';
 import {
    BLOCK_HEIGHT,
+   BLOCK_HEIGHT_MOBILE,
    BLOCK_WIDTH,
+   BLOCK_WIDTH_MOBILE,
    CANVAS_HEIGHT,
+   CANVAS_HEIGHT_MOBILE,
    CANVAS_WIDTH,
+   CANVAS_WIDTH_MOBILE,
    directions,
 } from '@/constants/init';
 import type { Block, MapGame } from '@/types/map';
@@ -33,6 +37,7 @@ export class MyTank {
    _keyRotate: boolean;
    _delayRotate: number;
    _soundTankEngine: HTMLAudioElement;
+   isMobile: boolean;
    checkCollisions: (
       key: string,
       x: number,
@@ -40,12 +45,12 @@ export class MyTank {
       type: string,
    ) => Block | boolean;
 
-   constructor(ctx: CanvasRenderingContext2D) {
+   constructor(ctx: CanvasRenderingContext2D, isMobile: boolean) {
       this.ctx = ctx;
-      this.cnvWidth = CANVAS_WIDTH;
-      this.cnvHeight = CANVAS_HEIGHT;
-      this.blockWidth = BLOCK_WIDTH;
-      this.blockHeight = BLOCK_HEIGHT;
+      this.cnvWidth = isMobile ? CANVAS_WIDTH_MOBILE : CANVAS_WIDTH;
+      this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
+      this.cnvHeight = isMobile ? CANVAS_HEIGHT_MOBILE : CANVAS_HEIGHT;
+      this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
       this.myTank = myTank;
       this.dir = myTank.dir;
       this.keys = handlerParameters();
@@ -60,6 +65,7 @@ export class MyTank {
       this._soundTankEngine = new Audio(soundsLinks.engine);
       this.checkCollisions = () =>
          checkCollisions(this.dir, this.tankX, this.tankY, 'tank');
+      this.isMobile = isMobile;
    }
 
    update() {
