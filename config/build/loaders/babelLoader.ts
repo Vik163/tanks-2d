@@ -21,7 +21,6 @@ export function buildBabelLoader ({ isDev, isTsx }: BuildBabelLoaderProps) {
             }
           ],
           '@babel/plugin-transform-runtime' // Плагин, который позволяет повторно использовать внедряемый вспомогательный код Babel для экономии места в коде.
-          // isDev && require.resolve("react-refresh/babel"), // нужен для включения функции «Fast Refresh» (быстрой перезагрузки) для компонентов React (при перезагрузке страницы состояния компонентов остаются неизменными)
         ].filter(Boolean)
       }
     }
