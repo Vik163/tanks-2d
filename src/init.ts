@@ -60,6 +60,22 @@ function init() {
       $('btn_stop')?.blur();
    });
 
+   $('fullscreen')?.addEventListener(
+      'click',
+      () => {
+         // игнорирование событий, которые произошли не на данной кнопке
+
+         // если элемент уже в полноэкранном режиме, выйти из него
+         // В противном случае войти в полный экран
+         if (document.fullscreenElement) {
+            document.exitFullscreen();
+         } else {
+            document.documentElement.requestFullscreen();
+         }
+      },
+      false,
+   );
+
    main.addListeners();
 }
 
