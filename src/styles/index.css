@@ -28,6 +28,13 @@
    border-radius: 5px;
 }
 
+@media screen and (max-width: 1000px) {
+   .app {
+      width: 100vw;
+      height: 320px;
+   }
+}
+
 @import url(./header/header.css);
 @import url(./header/header_adapt.css);
 @import url(./canvas/canvas.css);
