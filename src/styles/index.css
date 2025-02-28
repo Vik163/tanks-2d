@@ -31,7 +31,7 @@
 @media screen and (max-width: 1000px) {
    .app {
       width: 100vw;
-      height: 320px;
+      height: 375px;
    }
 
    .fullscreen {

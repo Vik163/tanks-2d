@@ -2,7 +2,7 @@
    .cnv__container {
       display: flex;
       width: 475px;
-      height: 320px;
+      height: 375px;
       border: 2px solid #ba822c;
       background: url(../../assets/images/maps/tiles_block.png);
       border-radius: 5px;
