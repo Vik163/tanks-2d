@@ -64,7 +64,7 @@ export class Shoot {
    }
 
    render() {
-      // изменяющийся огонь
+      // изменяющийся огонь с мобильным
       let link = this.shoot.fireLink[2];
 
       if (!this.isMobile) {
