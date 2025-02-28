@@ -53,7 +53,7 @@ export class Shooting {
       this.fireX = myTank.coord[0];
       this.fireY = myTank.coord[1];
       this.checkCollisions = () =>
-         checkCollisions(this.dir, this.fireX, this.fireY, 'fire');
+         checkCollisions(this.dir, this.fireX, this.fireY, 'fire', isMobile);
       this.isMobile = isMobile;
    }
 

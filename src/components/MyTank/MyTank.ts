@@ -36,6 +36,7 @@ export class MyTank {
    keys: KeysEvents;
    _keyRotate: boolean;
    _delayRotate: number;
+   _moveSize: number;
    _soundTankEngine: HTMLAudioElement;
    isMobile: boolean;
    checkCollisions: (
@@ -55,8 +56,8 @@ export class MyTank {
       this.dir = myTank.dir;
       this.keys = handlerParameters();
       this.gameTime = 0;
-      this.tankX = myTank.coord[0]; // смещаю из угла в центр
-      this.tankY = myTank.coord[1];
+      this.tankX = isMobile ? myTank.coordMob[0] : myTank.coord[0]; // смещаю из угла в центр
+      this.tankY = isMobile ? myTank.coordMob[1] : myTank.coord[1];
       this._angle = 0;
       this.map = map_1;
       this._coordCell = { cellX: 0, cellY: 0 };
@@ -64,15 +65,15 @@ export class MyTank {
       this._delayRotate = 150;
       this._soundTankEngine = new Audio(soundsLinks.engine);
       this.checkCollisions = () =>
-         checkCollisions(this.dir, this.tankX, this.tankY, 'tank');
+         checkCollisions(this.dir, this.tankX, this.tankY, 'tank', isMobile);
       this.isMobile = isMobile;
+      this._moveSize = isMobile ? 0.2 : 0.5;
    }
 
    update() {
       // получить координаты клетки на каждой итерации
-      this._coordCell = getCoordCell(this.tankX, this.tankY);
+      this._coordCell = getCoordCell(this.tankX, this.tankY, this.isMobile);
       this._moveAndRotateTank();
-
       myTank.coord[0] = this.tankX;
       myTank.coord[1] = this.tankY;
    }
@@ -127,13 +128,17 @@ export class MyTank {
    _moveAndRotateTank() {
       this._setParameters();
       // проверка движения
-      if (this._checkMoveTank('UP') && !this._keyRotate) this.tankY -= 0.5;
+      if (this._checkMoveTank('UP') && !this._keyRotate)
+         this.tankY -= this._moveSize;
 
-      if (this._checkMoveTank('DOWN') && !this._keyRotate) this.tankY += 0.5;
+      if (this._checkMoveTank('DOWN') && !this._keyRotate)
+         this.tankY += this._moveSize;
 
-      if (this._checkMoveTank('RIGHT') && !this._keyRotate) this.tankX += 0.5;
+      if (this._checkMoveTank('RIGHT') && !this._keyRotate)
+         this.tankX += this._moveSize;
 
-      if (this._checkMoveTank('LEFT') && !this._keyRotate) this.tankX -= 0.5;
+      if (this._checkMoveTank('LEFT') && !this._keyRotate)
+         this.tankX -= this._moveSize;
    }
 
    _smoothStop(key: Dir) {
@@ -175,7 +180,8 @@ export class MyTank {
    }
 
    renderMyTank() {
-      const img = window.resources.get(this.myTank.img);
+      const link = this.isMobile ? this.myTank.imgMob : this.myTank.img;
+      const img = window.resources.get(link);
       // реализация поворота в движении
       this.ctx.save();
       // смещаю координаты из угла в центр, поворот и возврат в угол

@@ -20,6 +20,9 @@ function init() {
    const btnSound = new Audio(soundsLinks.button);
    const pauseIn = new Audio(soundsLinks.timeStopIn);
    const pauseOut = new Audio(soundsLinks.timeStopOut);
+   const btnStop = $('btn_stop');
+   const btnStart = $('btn_start');
+   const btnFullScreen = $('fullscreen');
 
    const main = new Main(btnSound, isMobile);
 
@@ -39,7 +42,7 @@ function init() {
       loopGame();
    });
 
-   $('btn_start')?.addEventListener('click', (e) => {
+   btnStart?.addEventListener('click', (e) => {
       tune_1.play();
       btnSound.play();
       keyGame = main.actionsBtn('START', pauseIn, pauseOut);
@@ -49,28 +52,28 @@ function init() {
       mapsBlocks.forEach((i: InfoBlock) => {
          if (i.nameId) $(i.nameId)?.remove();
       });
-      $('btn_start')?.blur(); // для отмены одновременного срабатывания space и click
+      btnStart?.blur(); // для отмены одновременного срабатывания space и click
    });
-   $('btn_stop')?.addEventListener('click', () => {
+   btnStop?.addEventListener('click', () => {
       btnSound.play();
 
       keyGame = main.actionsBtn('STOP', pauseIn, pauseOut);
       tune_1.pause();
       tune_1.currentTime = 0;
-      $('btn_stop')?.blur();
+      btnStop?.blur();
    });
 
-   $('fullscreen')?.addEventListener(
+   btnFullScreen?.addEventListener(
       'click',
       () => {
-         // игнорирование событий, которые произошли не на данной кнопке
-
          // если элемент уже в полноэкранном режиме, выйти из него
          // В противном случае войти в полный экран
          if (document.fullscreenElement) {
+            btnFullScreen?.classList.remove('fullscreen_active');
             document.exitFullscreen();
          } else {
             document.documentElement.requestFullscreen();
+            btnFullScreen?.classList.add('fullscreen_active');
          }
       },
       false,

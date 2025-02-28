@@ -1,0 +1,47 @@
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: 'Lilita One', serif;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   text-rendering: geometricPrecision;
+   outline: 0;
+   outline-style: none;
+   -moz-outline-style: none;
+   -webkit-tap-highlight-color: transparent;
+}
+
+body {
+   width: 100vw;
+   min-height: 100vh;
+   background-color: var(--bg-color);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.page {
+   width: fit-content;
+   height: fit-content;
+   display: flex;
+   flex-direction: column;
+   position: relative;
+}
+
+.main {
+   border-radius: 5px;
+}
+
+@media screen and (max-width: 1000px) {
+   .page {
+      height: var(--height-mobile);
+      width: 700px;
+   }
+
+   .main {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+   }
+}

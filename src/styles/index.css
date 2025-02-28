@@ -1,52 +1,18 @@
-* {
-   margin: 0;
-   padding: 0;
-   box-sizing: border-box;
-   font-family: 'Lilita One', serif;
-   -webkit-font-smoothing: antialiased;
-   -moz-osx-font-smoothing: grayscale;
-   text-rendering: geometricPrecision;
-   outline: 0;
-   outline-style: none;
-   -moz-outline-style: none;
-   -webkit-tap-highlight-color: transparent;
+:root {
+   --bg-color: #242121;
+   --bg-header-color: #ba822c;
+   --bg-btn-color: #966925;
+   --border-btn-color: black;
+   --btn-active-color: #963f25;
+
+   --height-mobile: 352px;
 }
 
-.app {
-   width: 100vw;
-   height: 100vh;
-   background-color: #242121;
-   display: flex;
-   justify-content: center;
-}
-
-.main {
-   margin: 0 auto;
-   width: fit-content;
-   height: fit-content;
-   position: relative;
-   border-radius: 5px;
-}
-
-@media screen and (max-width: 1000px) {
-   .app {
-      width: 100vw;
-      height: 350px;
-   }
-
-   .fullscreen {
-      width: 20px;
-      height: 20px;
-      background-color: #ba822c;
-      position: absolute;
-      top: 10px;
-      right: -20px;
-   }
-}
-
+@import url(./main.css);
 @import url(./header/header.css);
 @import url(./header/header_adapt.css);
 @import url(./canvas/canvas.css);
+@import url(./buttons_manage/buttons_manage.css);
 @import url(./editor/editor.css);
 @import url(./editor/editor_adapt.css);
 @import url(./canvas/canvas_adapt.css);

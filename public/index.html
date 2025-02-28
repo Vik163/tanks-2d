@@ -1,33 +1,46 @@
 <!doctype html>
 <html lang="ru">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-      <link
-         href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Lilita+One&family=Scada:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu+Condensed&display=swap"
-         rel="stylesheet"
-      />
-      <title>Tanks</title>
-   </head>
-   <body class="app">
-      <main class="main">
-         <header class="header">
-            <h1 class="title">Game on Vanilla JS and TypeScript</h1>
-            <nav class="nav">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link
+      href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Lilita+One&family=Scada:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu+Condensed&display=swap"
+      rel="stylesheet" />
+   <title>Tanks</title>
+</head>
+
+<body>
+   <div class="page">
+      <header class="header">
+         <h1 class="title">Game on Vanilla JS and TypeScript</h1>
+         <nav class="nav">
+            <div class="btn__container">
                <button id="btn_start" class="btn" type="button">START</button>
                <button id="btn_stop" class="btn" type="button">STOP</button>
-               <button id="btn_editor" class="btn" type="button">EDITOR</button>
-            </nav>
-         </header>
+            </div>
+            <button id="btn_editor" class="btn btn__editor" type="button">EDITOR</button>
+         </nav>
+      </header>
+      <main class="main">
+         <button type="button" id="btn__fire" class="btn__manage btn__fire">fire</button>
          <div class="cnv__container">
             <canvas id="canvas"></canvas>
             <div class="cnv__info"></div>
          </div>
-
          <aside id="editor_nav" class="editor__nav"></aside>
+         <nav id="nav__manage-game" class="nav__manage-game">
+            <button type="button" id="btn__up" class="btn__manage btn__up"></button>
+            <button type="button" id="btn__left" class="btn__manage btn__left"></button>
+            <button type="button" id="btn__right" class="btn__manage btn__right"></button>
+            <button type="button" id="btn__down" class="btn__manage btn__down"></button>
+         </nav>
          <button id="fullscreen" class="fullscreen" type="button"></button>
+
       </main>
-   </body>
+   </div>
+</body>
+
 </html>

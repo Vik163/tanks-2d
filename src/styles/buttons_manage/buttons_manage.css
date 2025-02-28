@@ -1,0 +1,113 @@
+.nav__manage-game {
+   display: none;
+}
+
+.btns__manage {
+   display: none;
+}
+
+@media screen and (max-width: 1000px) {
+   .nav__manage-game {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+      width: 130px;
+      gap: 15px;
+      padding: 5px;
+   }
+
+   .btn__manage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      border: 2px solid var(--bg-btn-color);
+      border-radius: 15px;
+      height: 50px;
+      width: 50px;
+      color: var(--bg-header-color);
+      font-size: 18px;
+      letter-spacing: 3px;
+   }
+
+   .btn__fire {
+      width: 70px;
+      height: 70px;
+      margin-bottom: 105px;
+   }
+
+   .btn__up {
+      width: 70px;
+      position: relative;
+   }
+
+   .btn__up:before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      z-index: -1;
+      background: url(../../assets/icons/arrow.svg) no-repeat center;
+      transform: rotate(90deg);
+   }
+
+   .btn__down {
+      width: 70px;
+      position: relative;
+   }
+
+   .btn__down:before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      z-index: -1;
+      background: url(../../assets/icons/arrow.svg) no-repeat center;
+      transform: rotate(-90deg);
+   }
+
+   .btn__left {
+      background: url(../../assets/icons/arrow.svg) no-repeat center;
+      height: 70px;
+   }
+   .btn__right {
+      height: 70px;
+      position: relative;
+   }
+
+   .btn__right:before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      z-index: -1;
+      background: url(../../assets/icons/arrow.svg) no-repeat center;
+      transform: rotate(180deg);
+   }
+
+   .fullscreen {
+      width: 20px;
+      height: 20px;
+      background-color: #242121;
+      background: url(../../assets/icons/fullscreen.svg) no-repeat center;
+      background-size: 70%;
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      border: 1px solid var(--bg-btn-color);
+      border-radius: 5px;
+      transform: rotate(90deg);
+   }
+
+   .fullscreen_active {
+      background-image: url(../../assets/icons/fullscreen_exit.svg);
+   }
+}

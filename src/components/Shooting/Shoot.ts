@@ -40,7 +40,8 @@ export class Shoot {
       this.fireY = tankY;
       this.dir = dir;
       this._angle = angle;
-      this.speedFire = 0.9;
+      this.speedFire = isMobile ? 0.4 : 0.9;
+
       this._timerLink = 0;
       this.isMobile = isMobile;
    }
@@ -64,18 +65,21 @@ export class Shoot {
 
    render() {
       // изменяющийся огонь
-      let link = this.shoot.fireLink[0];
-      if (this._timerLink > 100) {
-         link = this.shoot.fireLink[1];
-      }
-      if (this._timerLink <= 100) {
-         link = this.shoot.fireLink[0];
-      }
-      if (this._timerLink === 200) {
-         this._timerLink = 0;
-      }
+      let link = this.shoot.fireLink[2];
 
-      this._timerLink++;
+      if (!this.isMobile) {
+         if (this._timerLink > 100) {
+            link = this.shoot.fireLink[1];
+         }
+         if (this._timerLink <= 100) {
+            link = this.shoot.fireLink[0];
+         }
+         if (this._timerLink === 200) {
+            this._timerLink = 0;
+         }
+
+         this._timerLink++;
+      }
       const img = window.resources.get(link);
 
       this.ctx.save();
