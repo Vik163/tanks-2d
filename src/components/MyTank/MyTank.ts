@@ -67,7 +67,7 @@ export class MyTank {
       this.checkCollisions = () =>
          checkCollisions(this.dir, this.tankX, this.tankY, 'tank', isMobile);
       this.isMobile = isMobile;
-      this._moveSize = isMobile ? 0.2 : 0.5;
+      this._moveSize = isMobile ? 0.15 : 0.3;
    }
 
    update() {

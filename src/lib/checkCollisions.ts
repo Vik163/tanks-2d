@@ -25,6 +25,7 @@ export function checkCollisions(
    const cnvHeight = isMobile ? CANVAS_HEIGHT_MOBILE : CANVAS_HEIGHT;
    const cnvWidth = isMobile ? CANVAS_WIDTH_MOBILE : CANVAS_WIDTH;
    const blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
+
    // Танк и огонь разные проверки (у танка плавная остановка огонь немного заходит на блок)
    const { cellX, cellYKey } = getCoordCell(x, y, isMobile);
    if (dir === 'UP') {
@@ -58,7 +59,7 @@ export function checkCollisions(
 
                return false;
             })) ||
-         y <= 0
+         y <= 1
       )
          return block || true;
    }
@@ -129,7 +130,7 @@ export function checkCollisions(
             }
             return false;
          }) ||
-         x <= 0
+         x <= 1
       )
          return block || true;
    }

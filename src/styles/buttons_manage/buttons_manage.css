@@ -39,6 +39,12 @@
       width: 70px;
       height: 70px;
       margin-top: 60px;
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+      -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+      user-select: none; /* Non-prefixed version, currently */
    }
 
    .btn__up {
@@ -101,7 +107,6 @@
       bottom: 0;
       width: 12%;
       height: 90px;
-      /* border: 1px solid red; */
       z-index: 0;
    }
 
