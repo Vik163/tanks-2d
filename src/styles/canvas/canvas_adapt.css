@@ -1,19 +1,13 @@
 @media screen and (max-width: 1000px) {
    .cnv__container {
-      display: flex;
       width: 475px;
-      height: var(--height-mobile);
-      border: 2px solid var(--bg-btn-color);
+      height: var(--height-cnv-mobile);
       background: url(../../assets/images/maps/tiles_block_mobile.png);
-      border-radius: 5px;
+      z-index: 2;
    }
 
    .cnv__info {
-      height: 100%;
-      width: 135px;
-      padding-left: 2px;
       background: url(../../assets/images/maps/info_block_mobile.png) no-repeat
          center;
-      background-size: 97% 97%;
    }
 }

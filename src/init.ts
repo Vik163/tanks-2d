@@ -23,6 +23,7 @@ function init() {
    const btnStop = $('btn_stop');
    const btnStart = $('btn_start');
    const btnFullScreen = $('fullscreen');
+   const observer = $('observer__fullscreen');
 
    const main = new Main(btnSound, isMobile);
 
@@ -71,13 +72,22 @@ function init() {
          if (document.fullscreenElement) {
             btnFullScreen?.classList.remove('fullscreen_active');
             document.exitFullscreen();
+            if (observer) observer.style.display = 'none';
          } else {
             document.documentElement.requestFullscreen();
             btnFullScreen?.classList.add('fullscreen_active');
+            btnFullScreen?.classList.add('fullscreen_hidden');
+            if (observer) observer.style.display = 'block';
          }
       },
       false,
    );
+
+   observer?.addEventListener('click', () => {
+      btnFullScreen?.classList.remove('fullscreen_hidden');
+
+      if (observer) observer.style.display = 'none';
+   });
 
    main.addListeners();
 }

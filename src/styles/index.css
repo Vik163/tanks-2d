@@ -5,7 +5,8 @@
    --border-btn-color: black;
    --btn-active-color: #963f25;
 
-   --height-mobile: 352px;
+   --height-mobile: 360px;
+   --height-cnv-mobile: 352px;
 }
 
 @import url(./main.css);
