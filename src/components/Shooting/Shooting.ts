@@ -45,7 +45,7 @@ export class Shooting {
       this.shooting = [];
       this.keys = handlerParameters();
       this.timer = 0;
-      this.delayFire = 350;
+      this.delayFire = 400;
       this._soundTankFire = new Audio(soundsLinks.tankFire);
       this.dir = myTank.dir;
       this._coordCell = { cellX: 0, cellY: 0 };
@@ -88,7 +88,7 @@ export class Shooting {
             this.timer = 0;
          } else {
             // задержка отключения звука
-            if (this.timer > this.delayFire / 2) {
+            if (this.timer > this.delayFire / 1.6) {
                this._soundTankFire.pause();
                this._soundTankFire.currentTime = 0;
             }

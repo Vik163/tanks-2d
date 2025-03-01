@@ -64,7 +64,10 @@ export const handlerParameters = () => {
    if (isMobile) {
       Object.entries(btns).forEach(([code, btn]) => {
          if (btn) {
-            btn.addEventListener('touchstart', () => setKey(code, true));
+            btn.addEventListener('touchstart', (ev) => {
+               ev.preventDefault();
+               setKey(code, true);
+            });
             btn.addEventListener('touchend', () => setKey(code, false));
          }
       });
