@@ -4,9 +4,23 @@ export const handlerParameters = () => {
    let pressedKeys: Record<string, boolean> = {};
    let angle = 0;
    let dir: Dir = 'UP';
+   const isMobile = window.matchMedia('(max-width: 1000px)').matches;
 
-   function setKey(event: KeyboardEvent, status: boolean) {
-      const code = event.code;
+   const $ = (id: string) => document.getElementById(id);
+   const fireBtn = $('btn__fire');
+   const upBtn = $('btn__up');
+   const downBtn = $('btn__down');
+   const leftBtn = $('btn__left');
+   const rightBtn = $('btn__right');
+   const btns = {
+      Space: fireBtn,
+      ArrowUp: upBtn,
+      ArrowDown: downBtn,
+      ArrowLeft: leftBtn,
+      ArrowRight: rightBtn,
+   };
+
+   function setKey(code: string, status: boolean) {
       let key: string;
 
       switch (code) {
@@ -47,9 +61,17 @@ export const handlerParameters = () => {
       pressedKeys[key] = status;
    }
 
-   document.addEventListener('keydown', (e) => setKey(e, true));
-
-   document.addEventListener('keyup', (e) => setKey(e, false));
+   if (isMobile) {
+      Object.entries(btns).forEach(([code, btn]) => {
+         if (btn) {
+            btn.addEventListener('touchstart', () => setKey(code, true));
+            btn.addEventListener('touchend', () => setKey(code, false));
+         }
+      });
+   } else {
+      document.addEventListener('keydown', (e) => setKey(e.code, true));
+      document.addEventListener('keyup', (e) => setKey(e.code, false));
+   }
 
    window.addEventListener('blur', () => {
       pressedKeys = {};

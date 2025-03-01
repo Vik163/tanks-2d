@@ -22,8 +22,6 @@ function init() {
    const pauseOut = new Audio(soundsLinks.timeStopOut);
    const btnStop = $('btn_stop');
    const btnStart = $('btn_start');
-   const btnFullScreen = $('fullscreen');
-   const observer = $('observer__fullscreen');
 
    const main = new Main(btnSound, isMobile);
 
@@ -43,7 +41,7 @@ function init() {
       loopGame();
    });
 
-   btnStart?.addEventListener('click', (e) => {
+   btnStart?.addEventListener('click', () => {
       tune_1.play();
       btnSound.play();
       keyGame = main.actionsBtn('START', pauseIn, pauseOut);
@@ -62,31 +60,6 @@ function init() {
       tune_1.pause();
       tune_1.currentTime = 0;
       btnStop?.blur();
-   });
-
-   btnFullScreen?.addEventListener(
-      'click',
-      () => {
-         // если элемент уже в полноэкранном режиме, выйти из него
-         // В противном случае войти в полный экран
-         if (document.fullscreenElement) {
-            btnFullScreen?.classList.remove('fullscreen_active');
-            document.exitFullscreen();
-            if (observer) observer.style.display = 'none';
-         } else {
-            document.documentElement.requestFullscreen();
-            btnFullScreen?.classList.add('fullscreen_active');
-            btnFullScreen?.classList.add('fullscreen_hidden');
-            if (observer) observer.style.display = 'block';
-         }
-      },
-      false,
-   );
-
-   observer?.addEventListener('click', () => {
-      btnFullScreen?.classList.remove('fullscreen_hidden');
-
-      if (observer) observer.style.display = 'none';
    });
 
    main.addListeners();

@@ -38,6 +38,7 @@
    .btn__fire {
       width: 70px;
       height: 70px;
+      margin-top: 60px;
    }
 
    .btn__up {
@@ -99,8 +100,8 @@
       position: absolute;
       bottom: 0;
       width: 12%;
-      height: 100px;
-      border: 1px solid red;
+      height: 90px;
+      /* border: 1px solid red; */
       z-index: 0;
    }
 
@@ -112,7 +113,7 @@
       background: url(../../assets/icons/fullscreen.svg) no-repeat center;
       background-size: 70%;
       position: absolute;
-      bottom: 55px;
+      bottom: 60px;
       left: 0;
       border: 1px solid var(--bg-btn-color);
       border-radius: 5px;

@@ -62,9 +62,37 @@ export class Main {
    }
 
    addListeners() {
+      const btnFullScreen = this._$('fullscreen');
+      const observer = this._$('observer__fullscreen');
+
       this._$('btn_editor')?.addEventListener('click', () => {
          this.btnSound.play();
          if (!this.keyGame) this.maps.openEditor();
+      });
+      // полноэкранный режим в mobile
+      btnFullScreen?.addEventListener(
+         'click',
+         () => {
+            // если элемент уже в полноэкранном режиме, выйти из него
+            // В противном случае войти в полный экран
+            if (document.fullscreenElement) {
+               btnFullScreen?.classList.remove('fullscreen_active');
+               document.exitFullscreen();
+               if (observer) observer.style.display = 'none';
+            } else {
+               document.documentElement.requestFullscreen();
+               btnFullScreen?.classList.add('fullscreen_active');
+               btnFullScreen?.classList.add('fullscreen_hidden');
+               if (observer) observer.style.display = 'block';
+            }
+         },
+         false,
+      );
+
+      observer?.addEventListener('click', () => {
+         btnFullScreen?.classList.remove('fullscreen_hidden');
+
+         if (observer) observer.style.display = 'none';
       });
    }
 
