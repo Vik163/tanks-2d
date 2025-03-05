@@ -15,6 +15,7 @@ import type { Sounds } from '@/types/sounds';
 import type { KeysEvents } from '@/types/main';
 import { handlerParameters } from '@/lib/handlerParameters';
 import { Shooting } from '../Shooting/Shooting';
+import { Enemies } from '../Enemies/Enemies';
 
 export class Main {
    cnv: HTMLCanvasElement;
@@ -30,6 +31,7 @@ export class Main {
    intervalId: string | number | NodeJS.Timeout | undefined;
    _$: (id: string) => HTMLElement | null;
    myTank: MyTank;
+   enemies: Enemies;
    sounds: Sounds;
    keys: KeysEvents;
    shooting: Shooting;
@@ -58,6 +60,7 @@ export class Main {
       this.myTank = new MyTank(this.ctx, isMobile);
       this.sounds = soundsLinks;
       this.shooting = new Shooting(this.ctx, isMobile);
+      this.enemies = new Enemies(this.ctx, isMobile);
       this.isMobile = isMobile;
    }
 
@@ -141,6 +144,7 @@ export class Main {
 
    update() {
       this.myTank.update();
+      this.enemies.update();
       this.shooting.update();
    }
 
@@ -150,6 +154,7 @@ export class Main {
 
       this.maps.renderMap();
       this.myTank.renderMyTank();
+      this.enemies.render();
       this.shooting.render();
    }
 }

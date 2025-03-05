@@ -1,5 +1,5 @@
 @media screen and (max-width: 1000px) {
-   .cnv__container {
+   .cnv {
       width: 475px;
       height: var(--height-cnv-mobile);
       background: url(../../assets/images/maps/tiles_block_mobile.png);
@@ -13,5 +13,27 @@
    .cnv__info {
       background: url(../../assets/images/maps/info_block_mobile.png) no-repeat
          center;
+      padding-left: 2px;
+      padding-top: 60px;
+      gap: 10px;
+   }
+
+   .cnv__info-block {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+   }
+
+   .cnv__info-text {
+      font-size: 8px;
+      color: white;
+      text-shadow: 3px 3px 5px var(--bg-color);
+      letter-spacing: 1px;
+   }
+
+   .cnv__info-img {
+      transform: rotate(180deg);
+      width: 22px;
+      height: 22px;
    }
 }

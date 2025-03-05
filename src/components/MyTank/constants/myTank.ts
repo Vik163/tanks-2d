@@ -11,6 +11,7 @@ export const myTank: IMyTank = {
    stars: 0,
    level: 1,
    hits: 0,
+   lives: 3,
    coord: [550, 751],
    coordMob: [242, 330],
 };

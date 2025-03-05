@@ -40,7 +40,7 @@ export class Shoot {
       this.fireY = tankY;
       this.dir = dir;
       this._angle = angle;
-      this.speedFire = 0.6;
+      this.speedFire = isMobile ? 0.5 : 0.6;
 
       this._timerLink = 0;
       this.isMobile = isMobile;

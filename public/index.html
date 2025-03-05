@@ -26,9 +26,23 @@
       </header>
       <main class="main">
          <button type="button" id="btn__fire" class="btn__manage btn__fire">fire</button>
-         <div class="cnv__container">
+         <div class="cnv">
             <canvas id="canvas"></canvas>
-            <div class="cnv__info"></div>
+            <ul class="cnv__info">
+               <li class="cnv__info-block">
+                  <span id="info_text" class="cnv__info-text"></span>
+               </li>
+               <li class="cnv__info-block">
+                  <span id="light_tank" class="cnv__info-text"></span>
+                  <img id="light_tank_img" class="cnv__info-img" src="../src/assets/images/tanks/enemy_light_tank_1.png"
+                     alt="light tank" />
+               </li>
+               <li class="cnv__info-block">
+                  <span id="medium_tank" class="cnv__info-text"></span>
+                  <img id="medium_tank_img" class="cnv__info-img"
+                     src="../src/assets/images/tanks/enemy_medium_tank_1.png" alt="medium tank" />
+               </li>
+            </ul>
          </div>
          <aside id="editor_nav" class="editor__nav"></aside>
          <nav id="nav__manage-game" class="nav__manage-game">

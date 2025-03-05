@@ -6,6 +6,11 @@ export function buildLoaders (options: BuildOptions) {
   const codeBabelLoader = buildBabelLoader({ ...options, isTsx: false })
   const tsxCodeBabelLoader = buildBabelLoader({ ...options, isTsx: true })
 
+  const htmlLoader = {
+    test: /\.html$/i,
+    loader: 'html-loader',
+  }
+
   // Можно добавить обработку шрифтов
   const fileLoader = {
     test: /\.(png|svg|jpg|jpeg|gif|ogg|mp3)$/i,
@@ -18,6 +23,6 @@ export function buildLoaders (options: BuildOptions) {
   }
 
   return {
-    rules: [fileLoader, codeBabelLoader, tsxCodeBabelLoader, cssLoader]
+    rules: [  fileLoader, htmlLoader,  codeBabelLoader, tsxCodeBabelLoader, cssLoader]
   }
 }

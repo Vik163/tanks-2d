@@ -23,6 +23,7 @@ export class MyTank {
    ctx: CanvasRenderingContext2D;
    map: MapGame;
    myTank: IMyTank;
+   _$: (id: string) => HTMLElement | null;
    gameTime: number;
    tankX: number;
    tankY: number;
@@ -48,6 +49,7 @@ export class MyTank {
 
    constructor(ctx: CanvasRenderingContext2D, isMobile: boolean) {
       this.ctx = ctx;
+      this._$ = (id: string) => document.getElementById(id)!;
       this.cnvWidth = isMobile ? CANVAS_WIDTH_MOBILE : CANVAS_WIDTH;
       this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
       this.cnvHeight = isMobile ? CANVAS_HEIGHT_MOBILE : CANVAS_HEIGHT;
@@ -79,6 +81,8 @@ export class MyTank {
    }
 
    _setParameters() {
+      const info = this._$('info_text');
+      if (info) info.textContent = `Lives: ${this.myTank.lives}`;
       if (
          this.keys.isDown('UP').status ||
          this.keys.isDown('DOWN').status ||

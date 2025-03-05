@@ -6,6 +6,14 @@ import headquarters from '@/assets/images/maps/headquarters.png';
 import placeStart from '@/assets/images/maps/place_start.png';
 import tank from '@/assets/images/tanks/my_light_tank_aura.png';
 import tankMob from '@/assets/images/tanks/my_light_tank_aura_mobile.png';
+import enemyTankL from '@/assets/images/tanks/enemy_light_tank_1.png';
+import enemyTankLM from '@/assets/images/tanks/enemy_light_tank_mobile_1.png';
+import enemyTankLHM from '@/assets/images/tanks/enemy_light_tank_hit_mobile_1.png';
+import enemyTankLH from '@/assets/images/tanks/enemy_light_tank_hit_1.png';
+import enemyTankM from '@/assets/images/tanks/enemy_medium_tank_1.png';
+import enemyTankMM from '@/assets/images/tanks/enemy_medium_tank_mobile_1.png';
+import enemyTankMHM from '@/assets/images/tanks/enemy_medium_tank_hit_mobile_1.png';
+import enemyTankMH from '@/assets/images/tanks/enemy_medium_tank_hit_1.png';
 
 import tankHit from '@/assets/images/tanks/my_light_tank_aura_hit.png';
 import fire_2 from '@/assets/images/blows/fire_2.png';
@@ -25,4 +33,12 @@ export const arrSrcImg = [
    fire_2,
    fire_1,
    fire,
+   enemyTankL,
+   enemyTankLM,
+   enemyTankLHM,
+   enemyTankLH,
+   enemyTankM,
+   enemyTankMM,
+   enemyTankMHM,
+   enemyTankMH,
 ];
