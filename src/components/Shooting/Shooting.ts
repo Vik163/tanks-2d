@@ -1,4 +1,4 @@
-import type { Dir, KeysEvents } from '@/types/main';
+import type { Dir, KeysEvents, TypeVerifiable } from '@/types/main';
 import { Shoot } from './Shoot';
 import { myTank } from '../MyTank/constants/myTank';
 import { soundsLinks } from '@/constants/sounds';
@@ -32,7 +32,13 @@ export class Shooting {
    map: MapGame;
    fireX: number;
    fireY: number;
-   checkCollisions: (key: string, x: number, y: number) => Block | boolean;
+   checkCollisions: (
+      dir: string,
+      x: number,
+      y: number,
+      type: TypeVerifiable,
+      isMobile: boolean,
+   ) => Block | boolean;
    delayFire: number;
    isMobile: boolean;
 
@@ -52,8 +58,7 @@ export class Shooting {
       this.map = map_1;
       this.fireX = myTank.coord[0];
       this.fireY = myTank.coord[1];
-      this.checkCollisions = () =>
-         checkCollisions(this.dir, this.fireX, this.fireY, 'fire', isMobile);
+      this.checkCollisions = checkCollisions;
       this.isMobile = isMobile;
    }
 
@@ -110,6 +115,8 @@ export class Shooting {
                this.dir,
                this.fireX,
                this.fireY,
+               'fire',
+               this.isMobile,
             );
 
             if (nodeCollision) {

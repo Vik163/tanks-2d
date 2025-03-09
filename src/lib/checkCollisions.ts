@@ -11,6 +11,7 @@ import {
 import { map_1 } from '@/constants/maps';
 import { getCoordCell } from './getCoordCell';
 import { Block } from '@/types/map';
+import { TypeVerifiable } from '@/types/main';
 
 type BlockCollisions = Block | undefined;
 
@@ -18,7 +19,7 @@ export function checkCollisions(
    dir: string,
    x: number,
    y: number,
-   type: string,
+   type: TypeVerifiable,
    isMobile: boolean,
 ): Block | boolean {
    const blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
@@ -30,7 +31,7 @@ export function checkCollisions(
    const { cellX, cellYKey } = getCoordCell(x, y, isMobile);
    if (dir === 'UP') {
       let block: BlockCollisions;
-
+      const checkFromType = type === 'enemy' ? y <= cellYKey + 1 : true;
       if (
          (type === 'fire' &&
             map_1[cellYKey] &&
@@ -47,12 +48,12 @@ export function checkCollisions(
 
                return false;
             })) ||
-         (type === 'tank' &&
+         (type !== 'fire' &&
             map_1[cellYKey - BLOCK_HEIGHT] &&
             map_1[cellYKey - BLOCK_HEIGHT].some((bl) => {
                const coord = isMobile ? bl.coordMob : bl.coord;
 
-               if (coord[0] === cellX && bl.countHit < 2) {
+               if (coord[0] === cellX && bl.countHit < 2 && checkFromType) {
                   block = bl;
                   return true;
                }
@@ -70,7 +71,8 @@ export function checkCollisions(
          (map_1[cellYKey + BLOCK_HEIGHT] &&
             map_1[cellYKey + BLOCK_HEIGHT].some((bl) => {
                const coord = isMobile ? bl.coordMob : bl.coord;
-
+               // console.log('coord[0]:', coord[0]);
+               // console.log(' cellX:', cellX);
                if (
                   type === 'fire'
                      ? coord[0] === cellX &&
@@ -117,13 +119,19 @@ export function checkCollisions(
       if (
          map_1[cellYKey].some((bl) => {
             const coord = isMobile ? bl.coordMob : bl.coord;
+            // в зависимости от танка разные проверки (плавная остановка myTank)
+            const checkFromType =
+               type === 'enemy'
+                  ? coord[0] === cellX - blockWidth &&
+                    x <= coord[0] + blockWidth + 1
+                  : coord[0] === cellX - blockWidth;
 
             if (
                type === 'fire'
                   ? x > coord[0] + blockWidth - 15 &&
                     x < coord[0] + blockWidth - 10 &&
                     bl.countHit < 2
-                  : coord[0] === cellX - blockWidth && bl.countHit < 2
+                  : checkFromType && bl.countHit < 2
             ) {
                block = bl;
                return true;

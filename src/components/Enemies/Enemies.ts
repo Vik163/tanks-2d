@@ -1,8 +1,7 @@
-import { Block, PlacesStart } from '@/types/map';
+import { PlacesStart } from '@/types/map';
 import { Enemy } from './Enemy';
 import { placesStartMap_1 } from '@/constants/maps';
 import { Dir } from '@/types/main';
-import { checkCollisions } from '@/lib/checkCollisions';
 
 export class Enemies {
    ctx: CanvasRenderingContext2D;
@@ -18,7 +17,6 @@ export class Enemies {
    _countEnemyM: number;
    _totalEnemyL: number;
    _totalEnemyM: number;
-   checkCollisions: (key: string, x: number, y: number) => Block | boolean;
 
    constructor(ctx: CanvasRenderingContext2D, isMobile: boolean) {
       this.ctx = ctx;
@@ -32,16 +30,16 @@ export class Enemies {
       this._enemyY = 0;
       this._countEnemyL = 0;
       this._countEnemyM = 0;
-      this._totalEnemyL = 5;
-      this._totalEnemyM = 5;
-      this.checkCollisions = () =>
-         checkCollisions(
-            this._dir,
-            this._enemyX,
-            this._enemyY,
-            'tank',
-            isMobile,
-         );
+      this._totalEnemyL = 3;
+      this._totalEnemyM = 1;
+      // this.checkCollisions = () =>
+      //    checkCollisions(
+      //       this._dir,
+      //       this._enemyX,
+      //       this._enemyY,
+      //       'tank',
+      //       isMobile,
+      //    );
    }
    showInfo() {
       if (this.enemies.length > 0) {
@@ -55,6 +53,11 @@ export class Enemies {
    update() {
       this._createEnemy();
       this.showInfo();
+      if (this.enemies.length > 0) {
+         this.enemies.forEach((enemy) => {
+            enemy.update();
+         });
+      }
    }
 
    _getRandomInt(max: number) {
@@ -68,15 +71,20 @@ export class Enemies {
          (this._timer === 10000 || this._timer === 0)
       ) {
          const randomInt = this._getRandomInt(this.places.length - 1);
+         // const randomInt = 2;
 
          this.places.forEach((p, i) => {
             if (randomInt === i + 1) {
                const coord = this.isMobile ? p.coordMob : p.coord;
-               console.log('randomInt:', randomInt);
-               const enemy = new Enemy(this.ctx, this.isMobile, coord);
+               const enemy = new Enemy(
+                  this.ctx,
+                  this.isMobile,
+                  this._dir,
+                  coord,
+               );
 
                this.enemies.push(enemy);
-               this._countEnemyL += this._countEnemyL;
+               this._countEnemyL++;
 
                this._timer = 0;
             }
@@ -86,29 +94,37 @@ export class Enemies {
       this._timer++;
    }
 
-   _deleteEnemy() {
-      if (this.enemies.length > 0) {
-         this.enemies = this.enemies.filter((enemy) => {
-            // получить новые координаты выстрела
-            const { enemyX, enemyY } = enemy.update();
+   // _deleteEnemy() {
+   //    let nodeCollision: boolean | Block = false;
+   //    if (this.enemies.length > 0) {
+   //       this.enemies = this.enemies.filter((enemy) => {
+   //          if (!nodeCollision) {
+   //             console.log('this.enemies:', nodeCollision);
 
-            this._enemyX = enemyX;
-            this._enemyY = enemyY;
-            // проверка столкновений
-            const nodeCollision = this.checkCollisions(
-               this._dir,
-               this._enemyX,
-               this._enemyY,
-            );
+   //             const { enemyX, enemyY } = enemy.update();
 
-            if (nodeCollision) {
-               // this._hitNode(nodeCollision);
-               return false;
-            }
-            return true;
-         });
-      }
-   }
+   //             this._enemyX = enemyX;
+   //             this._enemyY = enemyY;
+   //          }
+   //          // получить новые координаты выстрела
+
+   //          // проверка столкновений
+   //          nodeCollision = this.checkCollisions(
+   //             this._dir,
+   //             this._enemyX,
+   //             this._enemyY,
+   //          );
+
+   //          // if (nodeCollision) {
+   //          //    console.log('nodeCollision:', nodeCollision);
+
+   //          //    // this._hitNode(nodeCollision);
+   //          //    // return false;
+   //          // }
+   //          return true;
+   //       });
+   //    }
+   // }
 
    // _hitNode(node: Block | boolean) {
    //    if (typeof node !== 'boolean' && node.part === 'map') {

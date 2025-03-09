@@ -15,7 +15,7 @@ import {
 import type { Block, MapGame } from '@/types/map';
 import { map_1 } from '@/constants/maps';
 import { soundsLinks } from '@/constants/sounds';
-import type { Dir, KeysEvents } from '@/types/main';
+import type { Dir, KeysEvents, TypeVerifiable } from '@/types/main';
 import { checkCollisions } from '@/lib/checkCollisions';
 import { getCoordCell } from '@/lib/getCoordCell';
 
@@ -41,10 +41,11 @@ export class MyTank {
    _soundTankEngine: HTMLAudioElement;
    isMobile: boolean;
    checkCollisions: (
-      key: string,
+      dir: string,
       x: number,
       y: number,
-      type: string,
+      type: TypeVerifiable,
+      isMobile: boolean,
    ) => Block | boolean;
 
    constructor(ctx: CanvasRenderingContext2D, isMobile: boolean) {
@@ -66,8 +67,7 @@ export class MyTank {
       this._keyRotate = false;
       this._delayRotate = 150;
       this._soundTankEngine = new Audio(soundsLinks.engine);
-      this.checkCollisions = () =>
-         checkCollisions(this.dir, this.tankX, this.tankY, 'tank', isMobile);
+      this.checkCollisions = checkCollisions;
       this.isMobile = isMobile;
       this._moveSize = isMobile ? 0.15 : 0.3;
    }
@@ -121,7 +121,13 @@ export class MyTank {
    _checkMoveTank(key: Dir) {
       if (
          (this.keys.isDown(key).status &&
-            !this.checkCollisions(key, this.tankX, this.tankY, 'tank')) ||
+            !this.checkCollisions(
+               key,
+               this.tankX,
+               this.tankY,
+               'tank',
+               this.isMobile,
+            )) ||
          this._smoothStop(key)
       )
          return true;
