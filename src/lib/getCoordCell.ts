@@ -12,6 +12,8 @@ export function getCoordCell(x: number, y: number, isMobile: boolean) {
       ? ((Math.floor(y / blockHeight) * blockHeight) / 44) * 100
       : Math.floor(y / blockHeight) * blockHeight;
    const cellY = Math.floor(y / blockHeight) * blockHeight;
+   const numCellY = Math.floor(y / blockHeight);
    const cellX = Math.floor(x / blockWidth) * blockWidth;
-   return { cellX, cellY, cellYKey };
+   const numCellX = Math.floor(x / blockWidth);
+   return { numCellY, numCellX, cellX, cellY, cellYKey };
 }

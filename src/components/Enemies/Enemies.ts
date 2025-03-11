@@ -30,7 +30,7 @@ export class Enemies {
       this._enemyY = 0;
       this._countEnemyL = 0;
       this._countEnemyM = 0;
-      this._totalEnemyL = 3;
+      this._totalEnemyL = 1;
       this._totalEnemyM = 1;
       // this.checkCollisions = () =>
       //    checkCollisions(
@@ -70,8 +70,8 @@ export class Enemies {
          this._totalEnemyL > this._countEnemyL &&
          (this._timer === 10000 || this._timer === 0)
       ) {
-         const randomInt = this._getRandomInt(this.places.length - 1);
-         // const randomInt = 2;
+         // const randomInt = this._getRandomInt(this.places.length - 1);
+         const randomInt = 1;
 
          this.places.forEach((p, i) => {
             if (randomInt === i + 1) {

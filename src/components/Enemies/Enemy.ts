@@ -31,9 +31,18 @@ export class Enemy {
       isMobile: boolean,
    ) => Block | boolean;
    _timer: number;
+   _timerMove: number;
    _timerDelay: number;
-   _coordCell: { cellX: number; cellY: number };
+   _timerMoveDelay: number;
+   _coordCell: {
+      numCellY: number;
+      numCellX: number;
+      cellX: number;
+      cellY: number;
+   };
+   _countMoveDown: number;
    _directions: Directions;
+   _randomCellCoord: number;
 
    constructor(
       ctx: CanvasRenderingContext2D,
@@ -53,13 +62,20 @@ export class Enemy {
       this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
       this.checkCollisions = checkCollisions;
       this._timer = 0;
-      this._timerDelay = 500;
-      this._coordCell = { cellX: 0, cellY: 0 };
+      this._timerMove = 0;
+      this._timerMoveDelay = 5000;
+      this._timerDelay = 1000;
+      this._coordCell = { numCellX: 0, numCellY: 0, cellX: 0, cellY: 0 };
       this._directions = directions;
+      this._randomCellCoord = 0;
+      this._countMoveDown = 0;
    }
    update() {
       this._coordCell = getCoordCell(this._enemyX, this._enemyY, this.isMobile);
       if (!this._checkObstacles()) {
+         // console.log('this._timer:', this._timer);
+
+         // console.log('his._dir:', this._dir);
          if (this._dir === 'UP') {
             this._enemyY -= this._speedEnemy;
          }
@@ -69,7 +85,11 @@ export class Enemy {
          if (this._dir === 'RIGHT') {
             this._enemyX += this._speedEnemy;
          }
-         if (this._dir === 'LEFT') {
+         if (
+            this._dir === 'LEFT'
+            // &&
+            // this._randomCellCoord + this.blockWidth < this._enemyX
+         ) {
             this._enemyX -= this._speedEnemy;
          }
       }
@@ -77,19 +97,20 @@ export class Enemy {
       return { enemyX: this._enemyX, enemyY: this._enemyY };
    }
 
-   _changeDir(dir?: Dir) {
+   _changeDir(dir: Dir) {
+      this._dir = dir;
+
       if (dir === 'RIGHT') {
+         this._countMoveDown = 0;
          this._angle = 90;
-         this._dir = 'RIGHT';
       } else if (dir === 'LEFT') {
+         this._countMoveDown = 0;
          this._angle = -90;
-         this._dir = 'LEFT';
       } else if (dir === 'DOWN') {
+         this._countMoveDown++;
          this._angle = 180;
-         this._dir = 'DOWN';
       } else if (dir === 'UP') {
          this._angle = 0;
-         this._dir = 'UP';
       }
    }
 
@@ -104,60 +125,77 @@ export class Enemy {
       // первое столкновение
       const nodeCollision = this.checkCollisions(
          this._dir,
+         Math.ceil(this._enemyX),
+         this._enemyY,
+         'enemy',
+         this.isMobile,
+      );
+      this._timer++;
+
+      if (this._timer < this._timerDelay) {
+         return true;
+      }
+
+      if (nodeCollision) {
+         this._checkDir();
+         this._timer = 0;
+
+         // this._hitNode(nodeCollision);
+      }
+      if (
+         this._dir === 'LEFT' &&
+         this._randomCellCoord + this.blockWidth >= this._enemyX
+      ) {
+         this._timer = 0;
+         this._checkDir();
+
+         // this._hitNode(nodeCollision);
+      }
+      return false;
+   }
+
+   _checkDir() {
+      // задержка поворота и проверка свободного направления
+      // первая проверка вниз
+      const checkDown = this.checkCollisions(
+         'DOWN',
          this._enemyX,
          this._enemyY,
          'enemy',
          this.isMobile,
       );
+      // если свободно идет вниз иначе выбирает случайное свободное направление
+      if (!checkDown && this._countMoveDown < 2) {
+         this._changeDir('DOWN');
+      } else {
+         let checkDir: Block | boolean = true;
+         const maxIntRandom =
+            this._coordCell.numCellX - 3 > 0 ? this._coordCell.numCellX - 3 : 0;
 
-      // задержка поворота и проверка свободного направления
-      if (this._timer > this._timerDelay) {
-         // первая проверка вниз
-         const checkDown = this.checkCollisions(
-            'DOWN',
-            this._enemyX,
-            this._enemyY,
-            'enemy',
-            this.isMobile,
-         );
-         // если свободно идет вниз иначе выбирает случайное свободное направление
-         if (!checkDown) {
-            this._changeDir('DOWN');
-         } else {
-            let checkDir: Block | boolean = true;
+         this._randomCellCoord =
+            this._getRandomInt(14, maxIntRandom) * this.blockWidth;
 
-            while (checkDir) {
-               // console.log('checkDir:', checkDir);
-               const randomInt = this._getRandomInt(
-                  1,
-                  this._directions.length - 1,
-               );
+         while (checkDir) {
+            const randomDir = this._getRandomInt(
+               1,
+               this._directions.length - 1,
+            );
+            const newDir = this._directions[randomDir];
 
-               checkDir = this.checkCollisions(
-                  this._directions[randomInt],
-                  this._enemyX,
-                  this._enemyY,
-                  'enemy',
-                  this.isMobile,
-               );
+            checkDir = !this.checkCollisions(
+               newDir,
+               this._enemyX,
+               this._enemyY,
+               'enemy',
+               this.isMobile,
+            );
 
-               if (!checkDir) {
-                  this._changeDir(this._directions[randomInt]);
-                  break;
-               }
+            if (checkDir) {
+               this._changeDir(newDir);
+               break;
             }
          }
-
-         this._timer = 0;
       }
-
-      if (nodeCollision) {
-         this._timer++;
-
-         // this._hitNode(nodeCollision);
-         return true;
-      }
-      return false;
    }
 
    render() {
