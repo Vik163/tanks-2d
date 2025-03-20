@@ -179,7 +179,6 @@ export class RandomMove {
       }
 
       // случайная клетка остановки и выбора другого направления при движении влево
-      console.log('this._randomCellCoord:', this._randomCellCoord);
       if (this._dir === 'LEFT' && this._randomCellCoord >= this._enemyX) {
          this._timer = 0; // запускает таймер поворота
          this._changeDir('DOWN'); // поворачивает вниз и стреляет пока задержка
