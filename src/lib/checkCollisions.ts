@@ -29,9 +29,11 @@ export function checkCollisions(
 
    // Танк и огонь разные проверки (у танка плавная остановка огонь немного заходит на блок)
    const { cellX, cellYKey } = getCoordCell(x, y, isMobile);
+
+   //! === UP =================================
    if (dir === 'UP') {
       let block: BlockCollisions;
-      const checkFromType = type === 'enemy' ? y <= cellYKey + 1 : true;
+      const checkFromType = type === 'enemy' ? y <= cellYKey + 2 : true;
       if (
          (type === 'fire' &&
             map_1[cellYKey] &&
@@ -64,6 +66,8 @@ export function checkCollisions(
       )
          return block || true;
    }
+
+   //! === DOWN =================================
    if (dir === 'DOWN') {
       let block: BlockCollisions;
 
@@ -90,6 +94,8 @@ export function checkCollisions(
       )
          return block || true;
    }
+
+   //! === RIGHT =================================
    if (dir === 'RIGHT') {
       let block: BlockCollisions;
 
@@ -113,6 +119,8 @@ export function checkCollisions(
       )
          return block || true;
    }
+
+   //! === LEFT =================================
    if (dir === 'LEFT') {
       let block: BlockCollisions;
 
@@ -123,7 +131,7 @@ export function checkCollisions(
             const checkFromType =
                type === 'enemy'
                   ? coord[0] === cellX - blockWidth &&
-                    x <= coord[0] + blockWidth + 1
+                    x <= coord[0] + blockWidth + 2
                   : coord[0] === cellX - blockWidth;
 
             if (

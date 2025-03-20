@@ -70,8 +70,8 @@ export class Enemies {
          this._totalEnemyL > this._countEnemyL &&
          (this._timer === 10000 || this._timer === 0)
       ) {
-         // const randomInt = this._getRandomInt(this.places.length - 1);
-         const randomInt = 1;
+         const randomInt = this._getRandomInt(this.places.length - 1);
+         // const randomInt = 1;
 
          this.places.forEach((p, i) => {
             if (randomInt === i + 1) {
