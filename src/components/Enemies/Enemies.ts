@@ -36,7 +36,7 @@ export class Enemies {
       this._enemyY = 0;
       this._countEnemyL = 0;
       this._countEnemyM = 0;
-      this._totalEnemyL = 20;
+      this._totalEnemyL = 2;
       this._totalEnemyM = 0;
       this.nodesMove = nodesMove;
       // this.checkCollisions = () =>
