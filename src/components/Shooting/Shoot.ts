@@ -29,7 +29,6 @@ export class Shoot {
       tankX: number,
       tankY: number,
       dir: Dir,
-      angle: number,
       isMobile: boolean,
       whose: 'enemy' | 'my',
    ) {
@@ -42,7 +41,7 @@ export class Shoot {
       this.X = tankX;
       this.Y = tankY;
       this.dir = dir;
-      this._angle = angle;
+      this._angle = 0;
       this.speedFire = isMobile ? 0.5 : 0.6;
       this._timerLink = 0;
       this.isMobile = isMobile;
@@ -50,15 +49,19 @@ export class Shoot {
 
    update() {
       if (this.dir === 'UP') {
+         this._angle = 0;
          this.Y -= this.speedFire;
       }
       if (this.dir === 'DOWN') {
+         this._angle = 180;
          this.Y += this.speedFire;
       }
       if (this.dir === 'RIGHT') {
+         this._angle = 90;
          this.X += this.speedFire;
       }
       if (this.dir === 'LEFT') {
+         this._angle = -90;
          this.X -= this.speedFire;
       }
 

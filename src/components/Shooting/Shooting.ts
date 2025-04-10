@@ -1,14 +1,5 @@
-import type {
-   Dir,
-   KeysEvents,
-   NodeCollisions,
-   NodeName,
-   NodesMove,
-} from '@/types/main';
+import type { Dir, NodeCollisions, NodeName, NodesMove } from '@/types/main';
 import { Shoot } from './Shoot';
-import { myTank } from '../MyTank/constants/myTank';
-import { soundsLinks } from '@/constants/sounds';
-import { handlerParameters } from '@/lib/handlerParameters';
 import {
    BLOCK_HEIGHT,
    BLOCK_HEIGHT_MOBILE,
@@ -26,8 +17,7 @@ import { checkCollisions } from '@/lib/checkCollisions';
 export class Shooting {
    shooting: Shoot[];
    timer: number;
-   keys: KeysEvents;
-   _soundTankFire: HTMLAudioElement;
+   _soundTankFire: HTMLAudioElement | undefined;
    ctx: CanvasRenderingContext2D;
    dir: Dir;
    _coordCell: { cellX: number; cellY: number };
@@ -60,60 +50,48 @@ export class Shooting {
       this.cnvHeight = isMobile ? CANVAS_HEIGHT_MOBILE : CANVAS_HEIGHT;
       this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
       this.shooting = [];
-      this.keys = handlerParameters();
       this.timer = 0;
-      this.delayFire = isMobile ? 300 : 400;
-      this._soundTankFire = new Audio(soundsLinks.tankFire);
-      this.dir = myTank.dir;
+      this.delayFire = 0;
+      this._soundTankFire = undefined;
+      this.dir = 'UP';
       this._coordCell = { cellX: 0, cellY: 0 };
       this.map = map_1;
-      this.fireX = myTank.coord[0];
-      this.fireY = myTank.coord[1];
+      this.fireX = 0;
+      this.fireY = 0;
       this.checkCollisions = checkCollisions;
       this.isMobile = isMobile;
       this.nodesMove = nodesMove;
    }
 
-   update() {
-      this._deleteFires();
-      this._createFires();
-   }
-
-   _createFires() {
+   _shootingTank() {
       // выстрел со звуком
-      if (this.keys.isDown('SPACE').status) {
-         if (this.timer > this.delayFire) {
-            this._soundTankFire.play();
+      if (this.timer > this.delayFire) {
+         if (this._soundTankFire) this._soundTankFire.play();
 
-            this.dir = myTank.dir;
+         // создает новый выстрел
+         const newShoot = new Shoot(
+            this.ctx,
+            this.fireX,
+            this.fireY,
+            this.dir,
+            this.isMobile,
+            'my',
+         );
 
-            // создает новый выстрел
-            const newShoot = new Shoot(
-               this.ctx,
-               myTank.coord[0],
-               myTank.coord[1],
-               this.dir,
-               this.keys.isDown(this.dir).angle,
-               this.isMobile,
-               'my',
-            );
+         this.shooting.push(newShoot);
+         // Смещает координаты центра выстрела
 
-            this.shooting.push(newShoot);
-            // Смещает координаты центра выстрела
-
-            this.timer = 0;
-         } else {
-            // задержка отключения звука
-            if (this.timer > this.delayFire / 1.6) {
-               this._soundTankFire.pause();
-               this._soundTankFire.currentTime = 0;
-            }
+         this.timer = 0;
+      } else if (this._soundTankFire) {
+         // задержка отключения звука
+         if (this.timer > this.delayFire / 1.6) {
+            this._soundTankFire.pause();
+            this._soundTankFire.currentTime = 0;
          }
       }
-      this.timer++;
    }
 
-   _deleteFires() {
+   _deleteShoot() {
       if (this.shooting.length > 0) {
          this.shooting = this.shooting.filter((shoot) => {
             // получить новые координаты выстрела
@@ -153,10 +131,5 @@ export class Shooting {
          this.map = arr;
          localStorage.setItem('map_1', JSON.stringify(this.map));
       }
-   }
-
-   render() {
-      if (this.shooting.length > 0)
-         this.shooting.forEach((shoot) => shoot.render());
    }
 }

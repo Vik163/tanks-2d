@@ -10,6 +10,7 @@ import {
 
 import { RandomMove } from './RandomMove';
 import { checkIntersect } from '@/lib/checkIntersect';
+import { ShootingEnemy } from '../Shooting/ShootingEnemy';
 
 export class Enemy {
    ctx: CanvasRenderingContext2D;
@@ -25,12 +26,15 @@ export class Enemy {
    _randomMove: RandomMove;
    node: 'enemy';
    countHit: number;
+   _shootingEnemy: ShootingEnemy;
+   _nodesMove: NodesMove;
 
    constructor(
       ctx: CanvasRenderingContext2D,
       isMobile: boolean,
       dir: Dir,
       coord: number[],
+      enemies: NodesMove,
    ) {
       this.ctx = ctx;
       this.node = 'enemy';
@@ -45,9 +49,18 @@ export class Enemy {
       this.tankHeight = isMobile ? TANK_HEIGHT_MOBILE : TANK_HEIGHT;
       this._randomMove = new RandomMove(isMobile, dir, coord);
       this.countHit = 0;
+      this._nodesMove = enemies;
+      this._shootingEnemy = new ShootingEnemy(
+         this.ctx,
+         isMobile,
+         this._nodesMove,
+         this.X,
+         this.Y,
+      );
    }
    update(enemies: NodesMove) {
       // const nodeIntersect = this._checkIntersect(enemies);
+      this._shootingEnemy.update(this._dir, this.X, this.Y);
 
       const { dir, angle, obstacles } = this._randomMove.update(
          this.X,
@@ -82,6 +95,7 @@ export class Enemy {
    }
 
    render() {
+      this._shootingEnemy.render();
       const link = this.isMobile ? this.enemyL.imgMob : this.enemyL.img;
       const img = window.resources.get(link);
       // реализация поворота в движении

@@ -36,7 +36,7 @@ export class Enemies {
       this._enemyY = 0;
       this._countEnemyL = 0;
       this._countEnemyM = 0;
-      this._totalEnemyL = 2;
+      this._totalEnemyL = 4;
       this._totalEnemyM = 0;
       this.nodesMove = nodesMove;
       // this.checkCollisions = () =>
@@ -81,8 +81,8 @@ export class Enemies {
          // == выбор незанятого места для создания танка ==============
          let isCreate = false;
          while (!isCreate) {
-            // const randomInt = this._getRandomInt(this.places.length - 1);
-            const randomInt = 3;
+            const randomInt = this._getRandomInt(this.places.length - 1);
+            // const randomInt = 3;
 
             this.places.forEach((p, i) => {
                const coord = this.isMobile ? p.coordMob : p.coord;
@@ -101,6 +101,7 @@ export class Enemies {
                         this.isMobile,
                         this._dir,
                         coord,
+                        this.nodesMove,
                      );
                      this.nodesMove.push(enemy);
                      this.enemies.push(enemy);

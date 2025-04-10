@@ -16,6 +16,7 @@ import type { KeysEvents, NodesMove } from '@/types/main';
 import { handlerParameters } from '@/lib/handlerParameters';
 import { Shooting } from '../Shooting/Shooting';
 import { Enemies } from '../Enemies/Enemies';
+import { ShootingMyTank } from '../Shooting/ShootingMyTank';
 
 export class Main {
    cnv: HTMLCanvasElement;
@@ -38,6 +39,7 @@ export class Main {
    btnSound: HTMLAudioElement;
    isMobile: boolean;
    nodesMove: NodesMove;
+   shootingMyTank: ShootingMyTank;
 
    constructor(btnSound: HTMLAudioElement, isMobile: boolean) {
       this._$ = (id: string) => document.getElementById(id)!;
@@ -59,11 +61,17 @@ export class Main {
          isMobile,
       );
       this.myTank = new MyTank(this.ctx, isMobile);
-      this.nodesMove = [];
-      // this.nodesMove = [this.myTank];
+      // this.nodesMove = [];
+      this.nodesMove = [this.myTank];
 
       this.sounds = soundsLinks;
       this.shooting = new Shooting(this.ctx, isMobile, this.nodesMove);
+      this.shootingMyTank = new ShootingMyTank(
+         this.ctx,
+         isMobile,
+         this.nodesMove,
+      );
+
       this.enemies = new Enemies(this.ctx, isMobile, this.nodesMove);
       this.isMobile = isMobile;
    }
@@ -149,7 +157,7 @@ export class Main {
    update() {
       this.myTank.update();
       this.enemies.update();
-      this.shooting.update();
+      this.shootingMyTank.update(this.myTank.dir, this.myTank.X, this.myTank.Y);
    }
 
    render() {
@@ -159,6 +167,6 @@ export class Main {
       this.maps.renderMap();
       this.myTank.renderMyTank();
       this.enemies.render();
-      this.shooting.render();
+      this.shootingMyTank.render();
    }
 }
