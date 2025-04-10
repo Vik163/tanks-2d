@@ -1,4 +1,10 @@
-import type { Dir, KeysEvents, TypeVerifiable } from '@/types/main';
+import type {
+   Dir,
+   KeysEvents,
+   NodeCollisions,
+   NodeName,
+   NodesMove,
+} from '@/types/main';
 import { Shoot } from './Shoot';
 import { myTank } from '../MyTank/constants/myTank';
 import { soundsLinks } from '@/constants/sounds';
@@ -13,7 +19,7 @@ import {
    CANVAS_WIDTH,
    CANVAS_WIDTH_MOBILE,
 } from '@/constants/init';
-import type { Block, MapGame } from '@/types/map';
+import type { MapGame } from '@/types/map';
 import { map_1 } from '@/constants/maps';
 import { checkCollisions } from '@/lib/checkCollisions';
 
@@ -36,13 +42,18 @@ export class Shooting {
       dir: string,
       x: number,
       y: number,
-      type: TypeVerifiable,
+      type: NodeName,
       isMobile: boolean,
-   ) => Block | boolean;
+   ) => NodeCollisions;
    delayFire: number;
    isMobile: boolean;
+   nodesMove: NodesMove;
 
-   constructor(ctx: CanvasRenderingContext2D, isMobile: boolean) {
+   constructor(
+      ctx: CanvasRenderingContext2D,
+      isMobile: boolean,
+      nodesMove: NodesMove,
+   ) {
       this.ctx = ctx;
       this.cnvWidth = isMobile ? CANVAS_WIDTH_MOBILE : CANVAS_WIDTH;
       this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
@@ -60,11 +71,10 @@ export class Shooting {
       this.fireY = myTank.coord[1];
       this.checkCollisions = checkCollisions;
       this.isMobile = isMobile;
+      this.nodesMove = nodesMove;
    }
 
    update() {
-      // console.log('his.shooting:', this.shooting);
-
       this._deleteFires();
       this._createFires();
    }
@@ -85,6 +95,7 @@ export class Shooting {
                this.dir,
                this.keys.isDown(this.dir).angle,
                this.isMobile,
+               'my',
             );
 
             this.shooting.push(newShoot);
@@ -106,10 +117,10 @@ export class Shooting {
       if (this.shooting.length > 0) {
          this.shooting = this.shooting.filter((shoot) => {
             // получить новые координаты выстрела
-            const { fireX, fireY } = shoot.update();
+            const { X, Y } = shoot.update();
 
-            this.fireX = fireX;
-            this.fireY = fireY;
+            this.fireX = X;
+            this.fireY = Y;
             // проверка столкновений
             const nodeCollision = this.checkCollisions(
                this.dir,
@@ -128,16 +139,18 @@ export class Shooting {
       }
    }
 
-   _hitNode(node: Block | boolean) {
-      if (typeof node !== 'boolean' && node.part === 'map') {
-         const arr = this.map[node.coord[1]].map((nd) => {
-            if (node.type === 'bricks' && nd.coord[0] === node.coord[0])
+   _hitNode(node: NodeCollisions) {
+      if (typeof node !== 'boolean' && node.node === 'map') {
+         const arr = this.map.map((nd) => {
+            if (
+               node.type === 'bricks' &&
+               nd.coord[0] === node.coord[0] &&
+               nd.coord[1] === node.coord[1]
+            )
                nd.countHit++;
             return nd;
          });
-
-         this.map = { ...this.map, [node.coord[1]]: arr };
-
+         this.map = arr;
          localStorage.setItem('map_1', JSON.stringify(this.map));
       }
    }

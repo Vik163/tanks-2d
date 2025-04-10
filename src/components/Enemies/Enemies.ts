@@ -1,7 +1,8 @@
 import { PlacesStart } from '@/types/map';
 import { Enemy } from './Enemy';
 import { placesStartMap_1 } from '@/constants/maps';
-import { Dir } from '@/types/main';
+import { Dir, NodesMove } from '@/types/main';
+import { checkIntersect } from '@/lib/checkIntersect';
 
 export class Enemies {
    ctx: CanvasRenderingContext2D;
@@ -17,8 +18,13 @@ export class Enemies {
    _countEnemyM: number;
    _totalEnemyL: number;
    _totalEnemyM: number;
+   nodesMove: NodesMove;
 
-   constructor(ctx: CanvasRenderingContext2D, isMobile: boolean) {
+   constructor(
+      ctx: CanvasRenderingContext2D,
+      isMobile: boolean,
+      nodesMove: NodesMove,
+   ) {
       this.ctx = ctx;
       this._$ = (id: string) => document.getElementById(id)!;
       this.isMobile = isMobile;
@@ -30,8 +36,9 @@ export class Enemies {
       this._enemyY = 0;
       this._countEnemyL = 0;
       this._countEnemyM = 0;
-      this._totalEnemyL = 1;
-      this._totalEnemyM = 1;
+      this._totalEnemyL = 2;
+      this._totalEnemyM = 0;
+      this.nodesMove = nodesMove;
       // this.checkCollisions = () =>
       //    checkCollisions(
       //       this._dir,
@@ -55,7 +62,8 @@ export class Enemies {
       this.showInfo();
       if (this.enemies.length > 0) {
          this.enemies.forEach((enemy) => {
-            enemy.update();
+            const newNodes = this.nodesMove.filter((n) => enemy !== n);
+            enemy.update(newNodes);
          });
       }
    }
@@ -70,25 +78,41 @@ export class Enemies {
          this._totalEnemyL > this._countEnemyL &&
          (this._timer === 10000 || this._timer === 0)
       ) {
-         const randomInt = this._getRandomInt(this.places.length - 1);
-         // const randomInt = 1;
+         // == выбор незанятого места для создания танка ==============
+         let isCreate = false;
+         while (!isCreate) {
+            // const randomInt = this._getRandomInt(this.places.length - 1);
+            const randomInt = 3;
 
-         this.places.forEach((p, i) => {
-            if (randomInt === i + 1) {
+            this.places.forEach((p, i) => {
                const coord = this.isMobile ? p.coordMob : p.coord;
-               const enemy = new Enemy(
-                  this.ctx,
-                  this.isMobile,
-                  this._dir,
-                  coord,
-               );
 
-               this.enemies.push(enemy);
-               this._countEnemyL++;
+               if (randomInt === i + 1) {
+                  if (
+                     // проверяем свободная ли клетка
+                     !checkIntersect(
+                        { x: coord[0], y: coord[1] },
+                        undefined,
+                        this.enemies,
+                     )
+                  ) {
+                     const enemy = new Enemy(
+                        this.ctx,
+                        this.isMobile,
+                        this._dir,
+                        coord,
+                     );
+                     this.nodesMove.push(enemy);
+                     this.enemies.push(enemy);
+                     this._countEnemyL++;
 
-               this._timer = 0;
-            }
-         });
+                     this._timer = 0;
+
+                     isCreate = true;
+                  }
+               }
+            });
+         }
       }
 
       this._timer++;

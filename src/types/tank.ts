@@ -1,10 +1,12 @@
-import type { Dir } from '@/types/main';
+import type { Dir, NodeName, NodeTypes } from '@/types/main';
 
-export interface IMyTank {
+export interface Tank {
    img: string;
    imgMob: string;
    imgHit: string;
-   stars: number;
+   stars?: number;
+   node: NodeName;
+   type: NodeTypes;
    dir: Dir;
    level: number;
    lives: number;

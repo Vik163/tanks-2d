@@ -3,17 +3,39 @@ import {
    BLOCK_HEIGHT_MOBILE,
    BLOCK_WIDTH,
    BLOCK_WIDTH_MOBILE,
+   TANK_HEIGHT,
+   TANK_HEIGHT_MOBILE,
+   TANK_WIDTH,
+   TANK_WIDTH_MOBILE,
 } from '@/constants/init';
+import { CoordCell } from '@/types/main';
 
-export function getCoordCell(x: number, y: number, isMobile: boolean) {
+export const getCoord = (num: number, block: number) =>
+   Math.floor(Math.ceil(num) / block) * block;
+
+export function getCoordCell(
+   x: number,
+   y: number,
+   isMobile: boolean,
+): CoordCell {
    const blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
    const blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
+   const tankWidth = isMobile ? TANK_WIDTH_MOBILE : TANK_WIDTH;
+   const tankHeight = isMobile ? TANK_HEIGHT_MOBILE : TANK_HEIGHT;
+
    const cellYKey = isMobile
-      ? ((Math.floor(y / blockHeight) * blockHeight) / 44) * 100
-      : Math.floor(y / blockHeight) * blockHeight;
-   const cellY = Math.floor(y / blockHeight) * blockHeight;
+      ? (getCoord(y, blockHeight) / 44) * 100
+      : getCoord(y, blockHeight);
+   const cellsX = {
+      start: getCoord(x, blockWidth),
+      end: getCoord(x + tankWidth, blockWidth),
+   };
+   const cellsY = {
+      start: getCoord(y, blockHeight),
+      end: getCoord(y + tankHeight, blockHeight),
+   };
    const numCellY = Math.floor(y / blockHeight);
-   const cellX = Math.floor(x / blockWidth) * blockWidth;
    const numCellX = Math.floor(x / blockWidth);
-   return { numCellY, numCellX, cellX, cellY, cellYKey };
+
+   return { numCellY, numCellX, cellsX, cellsY, cellYKey };
 }

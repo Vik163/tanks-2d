@@ -1,4 +1,4 @@
-import type { Dir } from '@/types/main';
+import type { Dir, NodeName, NodeTypes } from '@/types/main';
 
 export interface IEnemyTank {
    img: string;
@@ -10,4 +10,7 @@ export interface IEnemyTank {
    hits: number;
    coord: [x: number, y: number];
    coordMob: [x: number, y: number];
+   node: NodeName;
+   countHit: number;
+   type: NodeTypes;
 }

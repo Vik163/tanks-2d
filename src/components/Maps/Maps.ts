@@ -82,19 +82,17 @@ export class Maps {
    }
 
    _initRender() {
-      Object.values(this.mapGame).forEach((arr) => {
-         arr.forEach((c) => {
-            const coord = this.isMobile ? c.coordMob : c.coord;
-            const link = c.type === 'bricks' ? this._getImg(c) : c.link;
-            const img = window.resources.get(link!);
-            this.ctx.drawImage(
-               img,
-               coord[0],
-               coord[1],
-               this.blockWidth,
-               this.blockHeight,
-            );
-         });
+      this.mapGame.forEach((c) => {
+         const coord = this.isMobile ? c.coordMob : c.coord;
+         const link = c.type === 'bricks' ? this._getImg(c) : c.link;
+         const img = window.resources.get(link!);
+         this.ctx.drawImage(
+            img,
+            coord[0],
+            coord[1],
+            this.blockWidth,
+            this.blockHeight,
+         );
       });
 
       this.placesStart?.forEach((pl) => {
@@ -128,33 +126,30 @@ export class Maps {
             Math.round(this.cursor.Y / BLOCK_HEIGHT) * BLOCK_HEIGHT;
 
          // проверка на существующий блок
-         const isExist = this._checkCoordBlock(cellsCoordW, cellsCoordH);
-         if (isExist) {
+         const isExistId = this._checkCoordBlock(cellsCoordW, cellsCoordH);
+
+         if (isExistId) {
             // если находим - удаляем
-            const arr = this.mapGame[cellsCoordH].filter(
-               (c) => c.coord[0] !== cellsCoordW,
-            );
+            const arr = this.mapGame.filter((c) => c.id !== isExistId);
 
             this.placesStart = this.placesStart.filter(
                (pl) =>
                   pl.coord[0] !== cellsCoordW || pl.type === 'placeMyStart',
             );
 
-            this.mapGame = {
-               ...this.mapGame,
-               [cellsCoordH]: arr,
-            };
+            this.mapGame = arr;
          } else {
             // иначе создаем новый
             const newBlock: Block = {
-               part: 'map',
+               id: this.mapGame[this.mapGame.length - 1].id + 1,
+               node: 'map',
                link: this.isSelectedBlock?.link,
                nameId: this.isSelectedBlock?.nameId,
                linkHit1: this.isSelectedBlock?.linkHit1,
                linkHit2: this.isSelectedBlock?.linkHit2,
                linkDel: this.isSelectedBlock?.linkDel,
                countHit: 0,
-               type: this.isSelectedBlock?.type,
+               type: this.isSelectedBlock?.type || 'bricks',
                coord: [cellsCoordW, cellsCoordH],
                coordMob: [cellsCoordW, cellsCoordH],
             };
@@ -162,32 +157,26 @@ export class Maps {
             // либо блоки, либо места старта
             if (newBlock.type === 'placeStart') {
                this.placesStart.push(newBlock);
-            } else if (newBlock.type !== 'placeMyStart') {
-               if (this.mapGame[cellsCoordH]) {
-                  this.mapGame[cellsCoordH].push(newBlock);
-               } else {
-                  this.mapGame = {
-                     ...this.mapGame,
-                     [cellsCoordH]: [newBlock],
-                  };
-               }
+               localStorage.setItem(
+                  'placesStartMap_1',
+                  JSON.stringify(this.placesStart),
+               );
+            } else {
+               this.mapGame.push(newBlock);
+               localStorage.setItem('map_1', JSON.stringify(this.mapGame));
             }
          }
-
-         localStorage.setItem('map_1', JSON.stringify(this.mapGame));
-         localStorage.setItem(
-            'placesStartMap_1',
-            JSON.stringify(this.placesStart),
-         );
       }
    }
 
    // проверка на существующий блок
-   _checkCoordBlock(w: number, h: number): boolean {
-      return !!(
-         (this.mapGame[h] && this.mapGame[h].some((c) => c.coord[0] === w)) ||
-         this.placesStart.some((pl) => pl.coord[0] === w)
-      );
+   _checkCoordBlock(w: number, h: number): number | undefined {
+      if (this.mapGame.length > 0) {
+         const blockId =
+            this.mapGame.find((c) => c.coord[1] === h && c.coord[0] === w)
+               ?.id || this.placesStart.find((pl) => pl.coord[0] === w)?.id;
+         return blockId || undefined;
+      }
    }
 
    _checkCoordScreen(): boolean {
@@ -388,13 +377,6 @@ export class Maps {
    }
 
    openEditor() {
-      // Создаем карту - массив объектов рядов по оси Y
-      if (Object.keys(this.mapGame).length === 0) {
-         for (let coord = 0; coord < CANVAS_HEIGHT; coord += BLOCK_HEIGHT) {
-            this.mapGame[coord] = [];
-         }
-      }
-
       this._handleButtonsWithListeners();
    }
 }

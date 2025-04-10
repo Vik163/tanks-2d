@@ -1,28 +1,22 @@
-export type TypesBlocks =
-   | 'bricks'
-   | 'concrete'
-   | 'placeStart'
-   | 'placeMyStart'
-   | 'headquarters'
-   | undefined;
-
-export type Part = 'map' | 'myTank' | 'enemy';
+import type { NodeTypes } from './main';
 
 export interface Block {
+   id: number;
    link: string | undefined;
    linkHit1?: string | undefined;
    linkHit2?: string | undefined;
    linkDel?: string | undefined;
-   part: Part;
+   node: 'map';
    nameId?: string;
    countHit: number;
-   type: TypesBlocks;
+   type: NodeTypes;
    coord: number[];
    coordMob: number[];
 }
 
 export type PlacesStart = Block[];
 
-export interface MapGame {
-   [x: string]: Block[];
-}
+export type MapGame = Block[];
+// export interface MapGame {
+//    [x: string]: Block[];
+// }

@@ -1,38 +1,48 @@
 import { handlerParameters } from '@/lib/handlerParameters';
 import { myTank } from './constants/myTank';
-import type { IMyTank } from './types/myTank';
 import {
-   BLOCK_HEIGHT,
-   BLOCK_HEIGHT_MOBILE,
-   BLOCK_WIDTH,
-   BLOCK_WIDTH_MOBILE,
    CANVAS_HEIGHT,
    CANVAS_HEIGHT_MOBILE,
    CANVAS_WIDTH,
    CANVAS_WIDTH_MOBILE,
    directions,
+   TANK_HEIGHT,
+   TANK_HEIGHT_MOBILE,
+   TANK_WIDTH,
+   TANK_WIDTH_MOBILE,
 } from '@/constants/init';
-import type { Block, MapGame } from '@/types/map';
+import type { MapGame } from '@/types/map';
 import { map_1 } from '@/constants/maps';
 import { soundsLinks } from '@/constants/sounds';
-import type { Dir, KeysEvents, TypeVerifiable } from '@/types/main';
+import type {
+   CoordCell,
+   Dir,
+   KeysEvents,
+   NodeCollisions,
+   NodeName,
+   NodeTypes,
+} from '@/types/main';
 import { checkCollisions } from '@/lib/checkCollisions';
 import { getCoordCell } from '@/lib/getCoordCell';
+import { Tank } from '@/types/tank';
 
 export class MyTank {
    ctx: CanvasRenderingContext2D;
    map: MapGame;
-   myTank: IMyTank;
+   myTank: Tank;
    _$: (id: string) => HTMLElement | null;
    gameTime: number;
-   tankX: number;
-   tankY: number;
+   coord: number[];
+   X: number;
+   Y: number;
+   node: NodeName;
+   type: NodeTypes;
    cnvWidth: number;
    cnvHeight: number;
-   blockWidth: number;
-   blockHeight: number;
+   tankWidth: number;
+   tankHeight: number;
    _angle: number;
-   _coordCell: { cellX: number; cellY: number };
+   _coordCell: CoordCell;
    dir: Dir;
    keys: KeysEvents;
    _keyRotate: boolean;
@@ -40,30 +50,43 @@ export class MyTank {
    _moveSize: number;
    _soundTankEngine: HTMLAudioElement;
    isMobile: boolean;
+   countHit: number;
    checkCollisions: (
       dir: string,
       x: number,
       y: number,
-      type: TypeVerifiable,
+      type: NodeName,
       isMobile: boolean,
-   ) => Block | boolean;
+   ) => NodeCollisions;
 
    constructor(ctx: CanvasRenderingContext2D, isMobile: boolean) {
       this.ctx = ctx;
       this._$ = (id: string) => document.getElementById(id)!;
+      this.node = 'tank';
+      this.type = 'light';
       this.cnvWidth = isMobile ? CANVAS_WIDTH_MOBILE : CANVAS_WIDTH;
-      this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
+      this.tankWidth = isMobile ? TANK_WIDTH_MOBILE : TANK_WIDTH;
       this.cnvHeight = isMobile ? CANVAS_HEIGHT_MOBILE : CANVAS_HEIGHT;
-      this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
+      this.tankHeight = isMobile ? TANK_HEIGHT_MOBILE : TANK_HEIGHT;
       this.myTank = myTank;
+      this.countHit = 0;
       this.dir = myTank.dir;
       this.keys = handlerParameters();
       this.gameTime = 0;
-      this.tankX = isMobile ? myTank.coordMob[0] : myTank.coord[0]; // смещаю из угла в центр
-      this.tankY = isMobile ? myTank.coordMob[1] : myTank.coord[1];
+      this.coord = isMobile
+         ? [myTank.coordMob[0], myTank.coordMob[0]]
+         : [myTank.coord[0], myTank.coord[1]];
+      this.X = isMobile ? myTank.coordMob[0] : myTank.coord[0]; // смещаю из угла в центр
+      this.Y = isMobile ? myTank.coordMob[1] : myTank.coord[1];
       this._angle = 0;
       this.map = map_1;
-      this._coordCell = { cellX: 0, cellY: 0 };
+      this._coordCell = {
+         numCellX: 0,
+         numCellY: 0,
+         cellsX: { start: 0, end: 0 },
+         cellsY: { start: 0, end: 0 },
+         cellYKey: 0,
+      };
       this._keyRotate = false;
       this._delayRotate = 150;
       this._soundTankEngine = new Audio(soundsLinks.engine);
@@ -74,10 +97,10 @@ export class MyTank {
 
    update() {
       // получить координаты клетки на каждой итерации
-      this._coordCell = getCoordCell(this.tankX, this.tankY, this.isMobile);
+      this._coordCell = getCoordCell(this.X, this.Y, this.isMobile);
       this._moveAndRotateTank();
-      myTank.coord[0] = this.tankX;
-      myTank.coord[1] = this.tankY;
+      myTank.coord[0] = this.X;
+      myTank.coord[1] = this.Y;
    }
 
    _setParameters() {
@@ -123,9 +146,9 @@ export class MyTank {
          (this.keys.isDown(key).status &&
             !this.checkCollisions(
                key,
-               this.tankX,
-               this.tankY,
-               'tank',
+               this.X,
+               this.Y,
+               'myTank',
                this.isMobile,
             )) ||
          this._smoothStop(key)
@@ -139,22 +162,22 @@ export class MyTank {
       this._setParameters();
       // проверка движения
       if (this._checkMoveTank('UP') && !this._keyRotate)
-         this.tankY -= this._moveSize;
+         this.Y -= this._moveSize;
 
       if (this._checkMoveTank('DOWN') && !this._keyRotate)
-         this.tankY += this._moveSize;
+         this.Y += this._moveSize;
 
       if (this._checkMoveTank('RIGHT') && !this._keyRotate)
-         this.tankX += this._moveSize;
+         this.X += this._moveSize;
 
       if (this._checkMoveTank('LEFT') && !this._keyRotate)
-         this.tankX -= this._moveSize;
+         this.X -= this._moveSize;
    }
 
    _smoothStop(key: Dir) {
       if (key === 'UP') {
          if (
-            Math.floor(this.tankY) - 1 > this._coordCell.cellY &&
+            Math.floor(this.Y) > this._coordCell.cellsY.start &&
             this.dir === 'UP'
          )
             return true;
@@ -162,8 +185,8 @@ export class MyTank {
 
       if (key === 'DOWN') {
          if (
-            Math.floor(this.tankY) > this._coordCell.cellY + 3 &&
-            Math.floor(this.tankY) < this._coordCell.cellY + this.blockHeight &&
+            Math.floor(this.Y) > this._coordCell.cellsY.start + 3 &&
+            Math.floor(this.Y) < this._coordCell.cellsY.end &&
             this.dir === 'DOWN'
          )
             return true;
@@ -171,8 +194,8 @@ export class MyTank {
 
       if (key === 'RIGHT') {
          if (
-            Math.floor(this.tankX) > this._coordCell.cellX &&
-            Math.floor(this.tankX) < this._coordCell.cellX + this.blockWidth &&
+            Math.floor(this.X) > this._coordCell.cellsX.start &&
+            Math.floor(this.X) < this._coordCell.cellsX.end &&
             this.dir === 'RIGHT'
          )
             return true;
@@ -180,7 +203,7 @@ export class MyTank {
 
       if (key === 'LEFT') {
          if (
-            Math.floor(this.tankX) > this._coordCell.cellX &&
+            Math.floor(this.X) > this._coordCell.cellsX.start &&
             this.dir === 'LEFT'
          ) {
             return true;
@@ -196,11 +219,11 @@ export class MyTank {
       this.ctx.save();
       // смещаю координаты из угла в центр, поворот и возврат в угол
       this.ctx.translate(
-         Math.round(this.tankX) + this.blockWidth / 2,
-         this.tankY + this.blockWidth / 2,
+         Math.round(this.X) + this.tankWidth / 2,
+         this.Y + this.tankWidth / 2,
       );
       this.ctx.rotate((this._angle * Math.PI) / 180);
-      this.ctx.drawImage(img, -this.blockWidth / 2, -this.blockWidth / 2);
+      this.ctx.drawImage(img, -this.tankWidth / 2, -this.tankWidth / 2);
       this.ctx.restore();
    }
 }

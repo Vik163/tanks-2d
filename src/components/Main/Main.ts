@@ -12,7 +12,7 @@ import { Maps } from '../Maps/Maps';
 import { MyTank } from '../MyTank/MyTank';
 import { soundsLinks } from '@/constants/sounds';
 import type { Sounds } from '@/types/sounds';
-import type { KeysEvents } from '@/types/main';
+import type { KeysEvents, NodesMove } from '@/types/main';
 import { handlerParameters } from '@/lib/handlerParameters';
 import { Shooting } from '../Shooting/Shooting';
 import { Enemies } from '../Enemies/Enemies';
@@ -37,6 +37,7 @@ export class Main {
    shooting: Shooting;
    btnSound: HTMLAudioElement;
    isMobile: boolean;
+   nodesMove: NodesMove;
 
    constructor(btnSound: HTMLAudioElement, isMobile: boolean) {
       this._$ = (id: string) => document.getElementById(id)!;
@@ -58,9 +59,12 @@ export class Main {
          isMobile,
       );
       this.myTank = new MyTank(this.ctx, isMobile);
+      this.nodesMove = [];
+      // this.nodesMove = [this.myTank];
+
       this.sounds = soundsLinks;
-      this.shooting = new Shooting(this.ctx, isMobile);
-      this.enemies = new Enemies(this.ctx, isMobile);
+      this.shooting = new Shooting(this.ctx, isMobile, this.nodesMove);
+      this.enemies = new Enemies(this.ctx, isMobile, this.nodesMove);
       this.isMobile = isMobile;
    }
 

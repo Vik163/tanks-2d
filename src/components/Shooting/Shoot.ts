@@ -1,20 +1,21 @@
 import { handlerParameters } from '@/lib/handlerParameters';
 import { shootTank } from './constants/shoot';
-import { ShootTank } from './types/shoot';
-import { Dir, KeysEvents } from '@/types/main';
+import type { Dir, KeysEvents, NodeName } from '@/types/main';
 import {
    BLOCK_HEIGHT,
    BLOCK_HEIGHT_MOBILE,
    BLOCK_WIDTH,
    BLOCK_WIDTH_MOBILE,
 } from '@/constants/init';
+import type { ShootTank } from '@/types/shoot';
 
 export class Shoot {
    ctx: CanvasRenderingContext2D;
    shoot: ShootTank;
+   node: NodeName;
    keys: KeysEvents;
-   fireX: number;
-   fireY: number;
+   X: number;
+   Y: number;
    blockWidth: number;
    blockHeight: number;
    _angle: number;
@@ -30,37 +31,38 @@ export class Shoot {
       dir: Dir,
       angle: number,
       isMobile: boolean,
+      whose: 'enemy' | 'my',
    ) {
       this.ctx = ctx;
+      this.node = 'fire';
       this.shoot = shootTank;
       this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
       this.blockHeight = isMobile ? BLOCK_HEIGHT_MOBILE : BLOCK_HEIGHT;
       this.keys = handlerParameters();
-      this.fireX = tankX;
-      this.fireY = tankY;
+      this.X = tankX;
+      this.Y = tankY;
       this.dir = dir;
       this._angle = angle;
       this.speedFire = isMobile ? 0.5 : 0.6;
-
       this._timerLink = 0;
       this.isMobile = isMobile;
    }
 
    update() {
       if (this.dir === 'UP') {
-         this.fireY -= this.speedFire;
+         this.Y -= this.speedFire;
       }
       if (this.dir === 'DOWN') {
-         this.fireY += this.speedFire;
+         this.Y += this.speedFire;
       }
       if (this.dir === 'RIGHT') {
-         this.fireX += this.speedFire;
+         this.X += this.speedFire;
       }
       if (this.dir === 'LEFT') {
-         this.fireX -= this.speedFire;
+         this.X -= this.speedFire;
       }
 
-      return { fireX: this.fireX, fireY: this.fireY };
+      return { X: this.X, Y: this.Y };
    }
 
    render() {
@@ -87,32 +89,30 @@ export class Shoot {
 
       if (this.dir === 'UP') {
          this.ctx.translate(
-            Math.round(this.fireX + this.blockWidth / 2.5) +
-               this.blockWidth / 2,
-            this.fireY + this.blockWidth / 2,
+            Math.round(this.X + this.blockWidth / 2.5) + this.blockWidth / 2,
+            this.Y + this.blockHeight / 2 + 5,
          );
       }
       if (this.dir === 'DOWN') {
          this.ctx.translate(
-            Math.round(this.fireX - this.blockWidth / 2.5) +
-               this.blockWidth / 2,
-            this.fireY + this.blockWidth / 2,
+            Math.round(this.X - this.blockWidth / 2.5) + this.blockWidth / 2,
+            this.Y + this.blockWidth / 2 - 5,
          );
       }
       if (this.dir === 'RIGHT') {
          this.ctx.translate(
-            Math.round(this.fireX) + this.blockWidth / 2,
-            this.fireY + this.blockHeight / 2.5 + this.blockWidth / 2,
+            Math.round(this.X) + this.blockWidth / 2 - 5,
+            this.Y + this.blockHeight / 2.5 + this.blockHeight / 2,
          );
       }
       if (this.dir === 'LEFT') {
          this.ctx.translate(
-            Math.round(this.fireX) + this.blockWidth / 2,
-            this.fireY - this.blockHeight / 2.5 + this.blockWidth / 2,
+            Math.round(this.X) + this.blockWidth / 2,
+            this.Y - this.blockHeight / 2.5 + this.blockWidth / 2,
          );
       }
       this.ctx.rotate((this._angle * Math.PI) / 180);
-      this.ctx.drawImage(img, -this.blockWidth / 2, -this.blockWidth / 2);
+      this.ctx.drawImage(img, -this.blockWidth / 2, -this.blockHeight / 2);
       this.ctx.restore();
    }
 }

@@ -1,14 +1,15 @@
 import { BLOCK_WIDTH, BLOCK_WIDTH_MOBILE, directions } from '@/constants/init';
 import { checkCollisions } from '@/lib/checkCollisions';
-import type { Dir, Directions, TypeVerifiable } from '@/types/main';
+import { getCoordCell } from '@/lib/getCoordCell';
+import type {
+   CoordCell,
+   Dir,
+   Directions,
+   NodeCollisions,
+   NodeName,
+   NodesMove,
+} from '@/types/main';
 import type { Block } from '@/types/map';
-
-interface CoordCell {
-   numCellY: number;
-   numCellX: number;
-   cellX: number;
-   cellY: number;
-}
 
 export class RandomMove {
    isMobile: boolean;
@@ -21,51 +22,68 @@ export class RandomMove {
       dir: string,
       x: number,
       y: number,
-      type: TypeVerifiable,
+      type: NodeName,
       isMobile: boolean,
-   ) => Block | boolean;
+      nodesMove?: NodesMove,
+   ) => NodeCollisions;
    _timer: number;
    _timerMoveDown: number;
    _timerDelay: number;
    _timerDownDelay: number;
    _coordCell: CoordCell;
    _countMoveDown: number; // счетчик движений вниз по постоянной координате х (ограничивает количество повторов)
-   _closeDir: [Dir?]; // массив закрытых направлений
+   _closestDirs: [Dir?]; // массив закрытых направлений
    _directions: Directions;
    _randomCellCoord: number; // случайная клетка остановки при движении влево
    _k: number; // коэффициент скорости поворота
    _dirTurn: { dir: 'clockwise' | 'anticlockwise' | ''; angle: number }; // направление и угол поворота
+   _forcedTurn: boolean;
+   _forcedTMove: boolean;
+   _nodesMove: NodesMove;
 
    constructor(isMobile: boolean, dir: Dir, coord: number[]) {
       this.isMobile = isMobile;
       this._dir = dir;
       this._enemyX = coord[0];
       this._enemyY = coord[1];
-      this._angle = 0;
+      this._angle = 180;
       this.blockWidth = isMobile ? BLOCK_WIDTH_MOBILE : BLOCK_WIDTH;
       this.checkCollisions = checkCollisions;
       this._timer = 0;
       this._timerMoveDown = 0;
       this._timerDelay = 2000;
       this._timerDownDelay = 2000;
-      this._coordCell = { numCellX: 0, numCellY: 0, cellX: 0, cellY: 0 };
+      this._coordCell = {
+         numCellX: 0,
+         numCellY: 0,
+         cellsX: { start: 0, end: 0 },
+         cellsY: { start: 0, end: 0 },
+         cellYKey: 0,
+      };
       this._directions = directions;
       this._randomCellCoord = 0;
       this._countMoveDown = 0;
-      this._closeDir = [];
+      this._closestDirs = [];
       this._k = 0.3;
-      this._dirTurn = { dir: '', angle: 0 };
+      this._dirTurn = { dir: '', angle: 180 };
+      this._forcedTurn = false;
+      this._forcedTMove = false;
+      this._nodesMove = [];
    }
 
-   update(x: number, y: number, coordCell: CoordCell) {
+   update(x: number, y: number, nodesMove: NodesMove) {
       this._enemyX = x;
       this._enemyY = y;
-      this._coordCell = coordCell;
+      this._nodesMove = nodesMove;
+      // this._forcedTurn = forcedTurn;
+
+      this._coordCell = getCoordCell(this._enemyX, this._enemyY, this.isMobile);
 
       return {
          dir: this._dir,
          angle: this._angle,
-         obstacles: !this._checkObstacles(),
+         obstacles: this._checkObstacles(),
+         forcedMove: this._forcedTMove,
       };
    }
 
@@ -73,19 +91,19 @@ export class RandomMove {
    _changeDir(dir: Dir) {
       this._dir = dir;
       if (dir === 'RIGHT') {
-         this._closeDir.push('RIGHT');
+         this._closestDirs.push('RIGHT');
          this._countMoveDown = 0;
          this._handleAngleTurn(90);
       } else if (dir === 'LEFT') {
-         this._closeDir.push('LEFT');
+         this._closestDirs.push('LEFT');
          this._countMoveDown = 0;
          this._handleAngleTurn(-90);
       } else if (dir === 'DOWN') {
-         this._closeDir.push('DOWN');
+         this._closestDirs.push('DOWN');
          this._countMoveDown++;
          this._handleAngleTurn(180);
       } else if (dir === 'UP') {
-         this._closeDir.push('UP');
+         this._closestDirs.push('UP');
          this._handleAngleTurn(0);
       }
    }
@@ -108,7 +126,7 @@ export class RandomMove {
          this._angle !== 180 &&
          this._angle !== -180
       ) {
-         if (this._angle <= 0)
+         if (this._angle < 0)
             this._dirTurn = { dir: 'anticlockwise', angle: -180 };
          else this._dirTurn = { dir: 'clockwise', angle: 180 };
       }
@@ -149,9 +167,10 @@ export class RandomMove {
       const nodeCollision = this.checkCollisions(
          this._dir,
          Math.ceil(this._enemyX),
-         this._enemyY,
-         'enemy',
+         Math.ceil(this._enemyY),
+         'tank',
          this.isMobile,
+         this._nodesMove,
       );
 
       this._timer++; // таймер поворота
@@ -163,20 +182,41 @@ export class RandomMove {
       )
          return true;
 
+      // ===== принудительное движение при пересечении танков ============
+      // if (this._timer === this._timerDelay - 1) {
+      //    if (this._forcedTurn) this._forcedTMove = true;
+      // }
+      // if (this._timer > this._timerDelay + 3) {
+      //    this._forcedTMove = false;
+      // }
+      // --------------------------------------------------------------
+
       //* === задержка движения для поворота ====
       if (this._timer <= this._timerDelay) {
          this._turnEnemy();
+
          return true;
       }
       if (this._timer > this._timerDelay + 500) {
-         this._closeDir = [];
+         this._closestDirs = [];
       }
 
       if (nodeCollision) {
          this._checkDir();
-
          this._timer = 0; // запускает таймер поворота
       }
+
+      // if (this._forcedTurn && !this._forcedTMove) {
+      //    if (this._dir === 'UP') {
+      //       this._changeDir('DOWN');
+      //    } else if (this._dir === 'DOWN') {
+      //       this._changeDir('UP');
+      //    } else if (this._dir === 'LEFT') {
+      //       this._changeDir('RIGHT');
+      //    } else this._changeDir('LEFT');
+
+      //    this._timer = 0; // запускает таймер поворота
+      // }
 
       // случайная клетка остановки и выбора другого направления при движении влево
       if (this._dir === 'LEFT' && this._randomCellCoord >= this._enemyX) {
@@ -192,16 +232,17 @@ export class RandomMove {
       // первая проверка вниз
       const checkDown = this.checkCollisions(
          'DOWN',
-         this._enemyX,
-         this._enemyY,
-         'enemy',
+         Math.ceil(this._enemyX),
+         Math.ceil(this._enemyY),
+         'tank',
          this.isMobile,
+         this._nodesMove,
       );
 
       // если свободно, то идет вниз (в массиве направлений нет ключа 'DOWN' и счетчик не заполнен)
       if (
-         (!this._closeDir.some((d) => d === 'DOWN') ||
-            this._closeDir.length === 0) &&
+         (!this._closestDirs.some((d) => d === 'DOWN') ||
+            this._closestDirs.length === 0) &&
          !checkDown &&
          this._countMoveDown < 2
       ) {
@@ -227,16 +268,17 @@ export class RandomMove {
 
             checkDir = !this.checkCollisions(
                newDir,
-               this._enemyX,
-               this._enemyY,
-               'enemy',
+               Math.ceil(this._enemyX),
+               Math.ceil(this._enemyY),
+               'tank',
                this.isMobile,
+               this._nodesMove,
             );
 
             // если находит свободное направление, которого нет в массиве, то меняет
             if (
-               (checkDir && !this._closeDir.some((d) => d === newDir)) ||
-               (checkDir && this._closeDir.length < 1)
+               (checkDir && !this._closestDirs.some((d) => d === newDir)) ||
+               (checkDir && this._closestDirs.length < 1)
             ) {
                this._changeDir(newDir);
                break;

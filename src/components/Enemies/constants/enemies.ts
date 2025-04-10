@@ -18,9 +18,12 @@ export const enimyLightTank: IEnemyTank = {
    hits: 0,
    coord: [0, 0],
    coordMob: [0, 0],
+   node: 'tank',
+   countHit: 0,
+   type: 'light',
 };
 
-export const enimyLMediumTank: IEnemyTank = {
+export const enimyMiddleTank: IEnemyTank = {
    img: enemyTankM,
    imgMob: enemyTankMM,
    imgHit: enemyTankMH,
@@ -30,4 +33,7 @@ export const enimyLMediumTank: IEnemyTank = {
    hits: 0,
    coord: [0, 0],
    coordMob: [0, 0],
+   node: 'tank',
+   countHit: 0,
+   type: 'middle',
 };
