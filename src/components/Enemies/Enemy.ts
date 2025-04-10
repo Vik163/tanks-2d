@@ -60,13 +60,14 @@ export class Enemy {
    }
    update(enemies: NodesMove) {
       // const nodeIntersect = this._checkIntersect(enemies);
-      this._shootingEnemy.update(this._dir, this.X, this.Y);
 
-      const { dir, angle, obstacles } = this._randomMove.update(
+      const { dir, angle, obstacles, isTurn } = this._randomMove.update(
          this.X,
          this.Y,
          enemies,
       );
+      this._shootingEnemy.update(this._dir, this.X, this.Y, isTurn);
+
       this._dir = dir;
       this._angle = angle;
       if (!obstacles) {

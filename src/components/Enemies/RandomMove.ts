@@ -40,6 +40,7 @@ export class RandomMove {
    _forcedTurn: boolean;
    _forcedTMove: boolean;
    _nodesMove: NodesMove;
+   isTurn: boolean;
 
    constructor(isMobile: boolean, dir: Dir, coord: number[]) {
       this.isMobile = isMobile;
@@ -69,6 +70,7 @@ export class RandomMove {
       this._forcedTurn = false;
       this._forcedTMove = false;
       this._nodesMove = [];
+      this.isTurn = false;
    }
 
    update(x: number, y: number, nodesMove: NodesMove) {
@@ -84,6 +86,7 @@ export class RandomMove {
          angle: this._angle,
          obstacles: this._checkObstacles(),
          forcedMove: this._forcedTMove,
+         isTurn: this.isTurn,
       };
    }
 
@@ -143,6 +146,8 @@ export class RandomMove {
       }
       // ==  установка правильных углов после поворота (-90, 0, 90, 180) ==
       if (this._timer === this._timerDelay) {
+         this.isTurn = false;
+
          if (this._dir === 'DOWN') this._timerMoveDown = 0; // таймер обстрела нижнего блока
 
          if (this._dirTurn.angle === 270) {
@@ -182,15 +187,6 @@ export class RandomMove {
       )
          return true;
 
-      // ===== принудительное движение при пересечении танков ============
-      // if (this._timer === this._timerDelay - 1) {
-      //    if (this._forcedTurn) this._forcedTMove = true;
-      // }
-      // if (this._timer > this._timerDelay + 3) {
-      //    this._forcedTMove = false;
-      // }
-      // --------------------------------------------------------------
-
       //* === задержка движения для поворота ====
       if (this._timer <= this._timerDelay) {
          this._turnEnemy();
@@ -203,6 +199,8 @@ export class RandomMove {
 
       if (nodeCollision) {
          this._checkDir();
+         this.isTurn = true;
+
          this._timer = 0; // запускает таймер поворота
       }
 

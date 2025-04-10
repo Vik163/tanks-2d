@@ -6,7 +6,7 @@ export class ShootingEnemy extends Shooting {
    dir: Dir;
    fireX: number;
    fireY: number;
-
+   isTurn: boolean;
    delayFire: number;
 
    constructor(
@@ -22,17 +22,15 @@ export class ShootingEnemy extends Shooting {
 
       this.fireX = X;
       this.fireY = Y;
-      // this.checkCollisions = checkCollisions;
-      // this.isMobile = isMobile;
-      // this.nodesMove = nodesMove;
+      this.isTurn = false;
    }
 
-   update(dir: Dir, X: number, Y: number) {
+   update(dir: Dir, X: number, Y: number, isTurn: boolean) {
       this.dir = dir;
       this.fireX = X;
       this.fireY = Y;
       this._deleteShoot();
-      this._shootingEnemy();
+      if (!isTurn) this._shootingEnemy();
    }
 
    _shootingEnemy() {
